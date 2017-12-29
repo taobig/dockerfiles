@@ -115,7 +115,7 @@ RUN wget -c -O composer https://getcomposer.org/download/${COMPOSER_VERSION}/com
 FROM centos:7.4.1708
 COPY --from=build-env /usr/local/nginx /usr/local/nginx
 COPY --from=build-env /usr/local/php /usr/local/php
-COPY --from=build-env /usr/local/src/composer /usr/bin/composer
+COPY --from=build-env /usr/local/src/composer /usr/local/bin/composer
 
 COPY --from=build-env /lib64/libcrypt.so.1   /lib64/libcrypt.so.1
 COPY --from=build-env /lib64/libz.so.1   /lib64/libz.so.1
@@ -162,17 +162,17 @@ RUN useradd -m -s /sbin/nologin www && \
     mkdir /var/log/nginx && \
     mkdir -p /etc/nginx/conf.d && \
     mkdir -p /app/web && chown -R www:www /app && \
-    ln  -s  /usr/local/php/bin/php    /usr/bin/php && \
-    ln  -s  /usr/local/php/bin/phpize    /usr/bin/phpize && \
-    ln  -s  /usr/local/php/bin/pecl    /usr/bin/pecl && \
-    ln  -s  /usr/local/php/bin/php-config    /usr/bin/php-config && \
-    ln  -s  /usr/local/nginx/sbin/nginx    /usr/sbin/nginx
+    ln  -s  /usr/local/php/bin/php    /usr/local/bin/php && \
+    ln  -s  /usr/local/php/bin/phpize    /usr/local/bin/phpize && \
+    ln  -s  /usr/local/php/bin/pecl    /usr/local/bin/pecl && \
+    ln  -s  /usr/local/php/bin/php-config    /usr/local/bin/php-config && \
+    ln  -s  /usr/local/nginx/sbin/nginx    /usr/local/sbin/nginx
 
 #overwrite nginx.conf
 ADD conf/nginx.conf /usr/local/nginx/conf/nginx.conf
 ADD conf/default_server.conf /etc/nginx/conf.d/default_server.conf
 
-RUN chmod +x /bin/composer
+RUN chmod +x /usr/local/bin/composer
 ADD start.sh /start.sh
 RUN chmod 755 /start.sh
 WORKDIR /app
