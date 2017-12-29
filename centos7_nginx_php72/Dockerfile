@@ -3,6 +3,7 @@ MAINTAINER taobig
 
 ENV NGINX_VERSION 1.12.2
 ENV PHP_VERSION 7.2.0
+ENV COMPOSER_VERSION 1.5.6
 
 #if not set WORKDIR, each RUN & CMD & ADD & COPY ... need to run `cd /usr/local/src`
 WORKDIR /usr/local/src
@@ -107,11 +108,13 @@ RUN sed -i 's/^;cgi\.fix_pathinfo[ ]*=[ ]*1/cgi\.fix_pathinfo=0/' /usr/local/php
     sed -i 's/^;listen.mode = 0660/listen.mode = 0660/' /usr/local/php/etc/php-fpm.d/www.conf
 #    sed -i 's/^;security\.limit_extensions .../default setting is safe/' /usr/local/php/etc/php-fpm.d/www.conf  && \
 
+RUN wget -c -O composer https://getcomposer.org/download/${COMPOSER_VERSION}/composer.phar
 
 
 FROM centos:7.4.1708
 COPY --from=build-env /usr/local/nginx /usr/local/nginx
 COPY --from=build-env /usr/local/php /usr/local/php
+COPY --from=build-env /usr/local/src/composer /usr/bin/composer
 
 COPY --from=build-env /lib64/libcrypt.so.1   /lib64/libcrypt.so.1
 COPY --from=build-env /lib64/libz.so.1   /lib64/libz.so.1
@@ -168,7 +171,6 @@ RUN useradd -m -s /sbin/nologin www && \
 ADD conf/nginx.conf /usr/local/nginx/conf/nginx.conf
 ADD conf/default_server.conf /etc/nginx/conf.d/default_server.conf
 
-ADD composer.phar /bin/composer
 RUN chmod +x /bin/composer
 ADD start.sh /start.sh
 RUN chmod 755 /start.sh
