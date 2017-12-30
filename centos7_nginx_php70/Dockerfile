@@ -102,6 +102,7 @@ RUN sed -i 's/^;cgi\.fix_pathinfo[ ]*=[ ]*1/cgi\.fix_pathinfo=0/' /usr/local/php
 #    sed -i 's/^;security\.limit_extensions .../default setting is safe/' /usr/local/php/etc/php-fpm.d/www.conf  && \
 
 RUN wget -c -O composer https://getcomposer.org/download/${COMPOSER_VERSION}/composer.phar
+RUN rm -rf /usr/local/php/include
 
 
 FROM centos:7.4.1708
