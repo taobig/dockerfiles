@@ -19,17 +19,8 @@ WORKDIR /usr/local/src
 # for php pecl install *** autoconf
 RUN yum install -y \
     gcc gcc-c++ make wget \
-    zlib-devel \
-    openssl-devel \
-    pcre-devel \
-    libxml2-devel \
-    libcurl-devel \
-    gd-devel \
-    libpng-devel \
-    libjpeg-devel \
-    freetype-devel \
+    zlib-devel openssl-devel pcre-devel libxml2-devel libcurl-devel gd-devel libpng-devel libjpeg-devel freetype-devel \
     autoconf && \
-    yum clean all  && \
     useradd -m -s /sbin/nologin www && \
  wget -c -O nginx.tar.gz http://nginx.org/download/nginx-$NGINX_VERSION.tar.gz && \
  tar -zxf nginx.tar.gz && rm -f nginx.tar.gz && \
@@ -45,7 +36,7 @@ RUN yum install -y \
     --without-mail_imap_module \
     --without-mail_smtp_module \
     --with-http_gzip_static_module && \
-    make && make install && make clean && cd .. && \
+    make  > /dev/null && make install && cd .. && \
  wget -c -O php.tar.gz http://php.net/distributions/php-$PHP_VERSION.tar.gz && \
  tar zxf php.tar.gz && rm -f php.tar.gz && \
      cd php-$PHP_VERSION && \
@@ -80,7 +71,7 @@ RUN yum install -y \
     --disable-cgi \
     --disable-phpdbg \
     && \
-    make && make install && make clean && cd .. && \
+    make  > /dev/null && make install && cd .. && \
     cp ./php-$PHP_VERSION/php.ini-production /usr/local/php/etc/php.ini && \
     mv /usr/local/php/etc/php-fpm.conf.default /usr/local/php/etc/php-fpm.conf && \
     mv /usr/local/php/etc/php-fpm.d/www.conf.default /usr/local/php/etc/php-fpm.d/www.conf  && \
