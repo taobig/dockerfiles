@@ -9,6 +9,7 @@ based on centos:7.4.1708
 docker run --name ${container_name} -p ${expose_port}:80  -v ${custom_nginx_conf_dir}:/etc/nginx/conf.d -v ${code_dir}:/app  -d  taobig/nginx-php7-fpm:latest
 
 ---
+Image's default timezone is **Asia/Shanghai**    
 nginx log is in /var/log/nginx  
 php.ini come from  php.ini-production  
 php.ini settings:

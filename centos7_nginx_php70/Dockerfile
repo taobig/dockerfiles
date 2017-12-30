@@ -169,8 +169,10 @@ ADD conf/default_server.conf /etc/nginx/conf.d
 RUN chmod +x /usr/local/bin/composer
 ADD start.sh /start.sh
 RUN chmod 755 /start.sh
-WORKDIR /app
 
+RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai  /etc/localtime
+
+WORKDIR /app
 #VOLUME ["/usr/local/nginx/html", "/usr/local/nginx/conf/ssl", "/usr/local/nginx/conf/vhost", "/usr/local/php/etc/php.d"]
 VOLUME ["/app"]
 
