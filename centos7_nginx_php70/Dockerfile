@@ -22,7 +22,7 @@ RUN yum install -y epel-release &&  yum clean all && \
     yum install -y  gcc gcc-c++ make wget \
     zlib-devel openssl-devel pcre-devel libxml2-devel libcurl-devel gd-devel libpng-devel libjpeg-devel \
     freetype-devel libmcrypt-devel \
-    autoconf && \
+    autoconf   > /dev/null&& \
     useradd -m -s /sbin/nologin www && \
     wget -c -O nginx.tar.gz http://nginx.org/download/nginx-$NGINX_VERSION.tar.gz && \
     wget -c -O php.tar.gz http://php.net/distributions/php-$PHP_VERSION.tar.gz
@@ -39,7 +39,7 @@ RUN tar -zxf nginx.tar.gz && rm -f nginx.tar.gz &&  \
     --without-mail_imap_module \
     --without-mail_smtp_module \
     --with-http_gzip_static_module && \
-    make  > /dev/null && make install && cd .. && \
+    make -j4 > /dev/null && make install && cd .. && \
  tar zxf php.tar.gz && rm -f php.tar.gz && \
      cd php-$PHP_VERSION && \
     ./configure --prefix=/usr/local/php \
@@ -74,7 +74,7 @@ RUN tar -zxf nginx.tar.gz && rm -f nginx.tar.gz &&  \
     --disable-cgi \
     --disable-phpdbg \
     && \
-    make  > /dev/null && make install &&  cd .. && \
+    make -j4 > /dev/null && make install &&  cd .. && \
  cp ./php-$PHP_VERSION/php.ini-production /usr/local/php/etc/php.ini && \
     mv /usr/local/php/etc/php-fpm.conf.default /usr/local/php/etc/php-fpm.conf && \
     mv /usr/local/php/etc/php-fpm.d/www.conf.default /usr/local/php/etc/php-fpm.d/www.conf && \
