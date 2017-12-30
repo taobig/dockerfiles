@@ -74,7 +74,6 @@ RUN tar -zxf nginx.tar.gz && rm -f nginx.tar.gz &&  \
     --enable-pcntl \
     --disable-cgi \
     --disable-phpdbg \
-    --without-pear \
     && \
     make && make install && make clean && cd .. && \
  cp ./php-$PHP_VERSION/php.ini-production /usr/local/php/etc/php.ini && \
@@ -90,6 +89,7 @@ RUN tar -zxf nginx.tar.gz && rm -f nginx.tar.gz &&  \
 #    --enable-shmop \
 #    --enable-sysvsem \
 #    --enable-ftp
+#   --without-pear    will remove pecl
 
 RUN sed -i 's/^;cgi\.fix_pathinfo[ ]*=[ ]*1/cgi\.fix_pathinfo=0/' /usr/local/php/etc/php.ini  && \
     sed -i 's/^;date\.timezone[ ]*=[ ]*/date\.timezone = Asia\/Shanghai/' /usr/local/php/etc/php.ini  && \
