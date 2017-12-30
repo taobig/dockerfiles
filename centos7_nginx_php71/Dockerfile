@@ -67,7 +67,6 @@ RUN yum install -y \
     --with-freetype-dir \
     --enable-fpm \
     --enable-xml \
-    --with-xmlrpc \
     --enable-inline-optimization \
     --enable-mbregex \
     --enable-mbstring \

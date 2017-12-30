@@ -62,7 +62,6 @@ RUN tar -zxf nginx.tar.gz && rm -f nginx.tar.gz &&  \
     --with-freetype-dir \
     --enable-fpm \
     --enable-xml \
-    --with-xmlrpc \
     --enable-inline-optimization \
     --enable-mbregex \
     --enable-mbstring \
