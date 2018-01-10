@@ -2,8 +2,8 @@ FROM centos:7.4.1708 AS build-env
 MAINTAINER taobig
 
 ENV NGINX_VERSION 1.12.2
-ENV PHP_VERSION 7.0.26
-ENV COMPOSER_VERSION 1.5.6
+ENV PHP_VERSION 7.0.27
+ENV COMPOSER_VERSION 1.6.2
 
 #if not set WORKDIR, each RUN & CMD & ADD & COPY ... need to run `cd /usr/local/src`
 WORKDIR /usr/local/src
