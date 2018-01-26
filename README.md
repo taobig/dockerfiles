@@ -6,7 +6,8 @@ based on centos:7.4.1708
 1. **7.0**  ` nginx + PHP 7.0-FPM`    
 
 ## usage
-docker run --name ${container_name} -p ${expose_port}:80  -v ${custom_nginx_conf_dir}:/etc/nginx/conf.d -v ${code_dir}:/app  -d  taobig/nginx-php7-fpm:latest
+docker run --name ${container_name} -p ${expose_port}:80  -v ${custom_nginx_conf_dir}:/etc/nginx/conf.d -v ${code_dir}:/app  -d  taobig/nginx-php7-fpm:latest  
+`/app/web` is default document root
 
 ---
 Image's default timezone is **Asia/Shanghai**    
