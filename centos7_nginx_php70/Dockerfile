@@ -38,7 +38,10 @@ RUN tar -zxf nginx.tar.gz && rm -f nginx.tar.gz &&  \
     --without-mail_pop3_module \
     --without-mail_imap_module \
     --without-mail_smtp_module \
-    --with-http_gzip_static_module && \
+    --with-http_v2_module \
+    --with-http_ssl_module \
+    --with-http_gzip_static_module \
+    --with-http_stub_status_module && \
     make -j4 > /dev/null && make install && cd .. && \
  tar zxf php.tar.gz && rm -f php.tar.gz && \
      cd php-$PHP_VERSION && \

@@ -35,7 +35,10 @@ RUN yum install -y \
     --without-mail_pop3_module \
     --without-mail_imap_module \
     --without-mail_smtp_module \
-    --with-http_gzip_static_module && \
+    --with-http_v2_module \
+    --with-http_ssl_module \
+    --with-http_gzip_static_module \
+    --with-http_stub_status_module && \
     make -j4 > /dev/null && make install && cd .. && \
  wget -c -O php.tar.gz http://php.net/distributions/php-$PHP_VERSION.tar.gz && \
  tar zxf php.tar.gz && rm -f php.tar.gz && \
