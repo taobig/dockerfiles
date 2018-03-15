@@ -1,6 +1,6 @@
 # nginx-php7-fpm
 based on centos:7.4.1708
-## tag name
+## tags
 1. **latest** , **7.2**  ` nginx + PHP 7.2-FPM`  
 1. **7.1**  ` nginx + PHP 7.1-FPM`  
 1. **7.0**  ` nginx + PHP 7.0-FPM`    
