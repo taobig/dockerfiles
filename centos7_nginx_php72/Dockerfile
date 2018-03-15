@@ -1,5 +1,5 @@
 FROM centos:7.4.1708 AS build-env
-MAINTAINER taobig
+#MAINTAINER taobig
 
 ENV NGINX_VERSION 1.12.2
 ENV PHP_VERSION 7.2.3
@@ -103,12 +103,6 @@ RUN sed -i 's/^;date\.timezone[ ]*=[ ]*/date\.timezone = Asia\/Shanghai/' /usr/l
 
 RUN rm -rf /usr/local/php/include
 RUN wget -c -O composer https://getcomposer.org/download/${COMPOSER_VERSION}/composer.phar
-
-RUN git clone https://github.com/derickr/vld.git
-RUN cd vld
-RUN phpize
-RUN ./configure
-RUN make && make install
 
 
 FROM centos:7.4.1708
