@@ -2,7 +2,7 @@ FROM centos:7.4.1708 AS build-env
 MAINTAINER taobig
 
 ENV NGINX_VERSION 1.12.2
-ENV PHP_VERSION 7.1.13
+ENV PHP_VERSION 7.1.15
 ENV COMPOSER_VERSION 1.6.2
 
 #if not set WORKDIR, each RUN & CMD & ADD & COPY ... need to run `cd /usr/local/src`
@@ -78,7 +78,6 @@ RUN yum install -y \
     cp ./php-$PHP_VERSION/php.ini-production /usr/local/php/etc/php.ini && \
     mv /usr/local/php/etc/php-fpm.conf.default /usr/local/php/etc/php-fpm.conf && \
     mv /usr/local/php/etc/php-fpm.d/www.conf.default /usr/local/php/etc/php-fpm.d/www.conf  && \
-    rm -rf /usr/local/src/* && \
     strip /usr/local/php/bin/php && \
     strip /usr/local/php/sbin/php-fpm && \
     strip /usr/local/nginx/sbin/nginx
