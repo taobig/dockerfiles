@@ -1,9 +1,9 @@
-FROM centos:7.4.1708 AS build-env
+FROM centos:7.5.1804 AS build-env
 #MAINTAINER taobig
 
 ENV NGINX_VERSION 1.14.0
-ENV PHP_VERSION 7.1.17
-ENV COMPOSER_VERSION 1.6.4
+ENV PHP_VERSION 7.1.18
+ENV COMPOSER_VERSION 1.6.5
 
 #if not set WORKDIR, each RUN & CMD & ADD & COPY ... need to run `cd /usr/local/src`
 WORKDIR /usr/local/src
@@ -105,7 +105,7 @@ RUN rm -rf /usr/local/php/include
 RUN wget -c -O composer https://getcomposer.org/download/${COMPOSER_VERSION}/composer.phar
 
 
-FROM centos:7.4.1708
+FROM centos:7.5.1804
 COPY --from=build-env /usr/local/nginx /usr/local/nginx
 COPY --from=build-env /usr/local/php /usr/local/php
 COPY --from=build-env /usr/local/src/composer /usr/local/bin/composer
