@@ -15,7 +15,7 @@ php.ini settings:
 1. date.timezone = Asia/Shanghai
 1. session.use_strict_mode = 1
 1. session.cookie_httponly = 1
-1. memory_limit = 64M
+1. memory_limit = 128M
 1. expose_php = Off
 
 ## build-in application
