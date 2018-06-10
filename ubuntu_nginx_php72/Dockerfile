@@ -93,9 +93,10 @@ RUN cp ./php-$PHP_VERSION/php.ini-production /usr/local/php/etc/php.ini && \
 
 RUN sed -i 's/^;date\.timezone[ ]*=[ ]*/date\.timezone = Asia\/Shanghai/' /usr/local/php/etc/php.ini  && \
     sed -i 's/^session\.use_strict_mode = 0/session\.use_strict_mode = 1/' /usr/local/php/etc/php.ini  && \
-    sed -i 's/^session\.cookie_httponly =/session\.cookie_httponly = 1/' /usr/local/php/etc/php.ini && \
+    sed -i 's/^session\.cookie_httponly =$/session\.cookie_httponly = 1/' /usr/local/php/etc/php.ini && \
     sed -i 's/^memory_limit = 128M/memory_limit = 64M/' /usr/local/php/etc/php.ini && \
     sed -i 's/^expose_php = On/expose_php = Off/' /usr/local/php/etc/php.ini && \
+    sed -i 's/^upload_max_filesize = 2M/upload_max_filesize = 20M/' /usr/local/php/etc/php.ini && \
     sed -i 's/^listen = 127\.0\.0\.1:9000/listen = \/var\/run\/php-fpm\.sock/' /usr/local/php/etc/php-fpm.d/www.conf  && \
     sed -i 's/^;listen.owner = www/listen.owner = www/' /usr/local/php/etc/php-fpm.d/www.conf  && \
     sed -i 's/^;listen.group = www/listen.group = www/' /usr/local/php/etc/php-fpm.d/www.conf  && \
