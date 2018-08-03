@@ -1,7 +1,8 @@
 FROM ubuntu:18.04 AS build-env
 
 ENV NGINX_VERSION 1.14.0
-ENV PHP_VERSION 7.2.8
+#ENV PHP_VERSION 7.2.8
+ENV PHP_VERSION php-7.3.0beta1
 ENV COMPOSER_VERSION 1.7.0
 
 #if not set WORKDIR, each RUN & CMD & ADD & COPY ... need to run `cd /usr/local/src`
@@ -43,7 +44,7 @@ RUN tar -zxf nginx.tar.gz && rm -f nginx.tar.gz && \
     make -j4 > /dev/null && make install
 
 #RUN wget -c -O php.tar.gz http://php.net/distributions/php-$PHP_VERSION.tar.gz
-RUN wget -c -O php.tar.gz https://downloads.php.net/~cmb/php-7.3.0beta1.tar.gz
+RUN wget -c -O php.tar.gz https://downloads.php.net/~cmb/php-$PHP_VERSION.tar.gz
 RUN tar zxf php.tar.gz && rm -f php.tar.gz && \
      cd php-$PHP_VERSION && \
     ./configure --prefix=/usr/local/php \
