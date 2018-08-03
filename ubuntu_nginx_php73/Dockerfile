@@ -9,8 +9,9 @@ WORKDIR /usr/local/src
 
 RUN apt-get update
 RUN apt-get install -y wget
-RUN apt-get install -y build-essential autoconf make automake bison re2c libxml2-dev libssl-dev libfreetype6-dev libcurl4-gnutls-dev libjpeg-dev libpng-dev libreadline6-dev  pkg-config
-
+# 16.04 libreadline6-dev
+# 18.04 libreadline-dev  add: libzip-dev
+RUN apt-get install -y build-essential autoconf make automake bison re2c libxml2-dev libssl-dev libfreetype6-dev libcurl4-gnutls-dev libjpeg-dev libpng-dev libreadline-dev  pkg-config libzip-dev
 
 #Add user  && download php and nginx source code
 #    groupadd -r www && \
