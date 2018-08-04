@@ -171,6 +171,8 @@ COPY --from=build-env /usr/lib/x86_64-linux-gnu/libsasl2.so.2   /usr/lib/x86_64-
 COPY --from=build-env /usr/lib/x86_64-linux-gnu/libgssapi.so.3   /usr/lib/x86_64-linux-gnu/libgssapi.so.3
 COPY --from=build-env /usr/lib/x86_64-linux-gnu/libffi.so.6   /usr/lib/x86_64-linux-gnu/libffi.so.6
 COPY --from=build-env /usr/lib/x86_64-linux-gnu/libheimntlm.so.0   /usr/lib/x86_64-linux-gnu/libheimntlm.so.0
+# 18.04 add:
+COPY --from=build-env  /usr/lib/x86_64-linux-gnu/libzip.so.4    /usr/lib/x86_64-linux-gnu/libzip.so.4
 
 RUN useradd -m -s /sbin/nologin www && \
     mkdir /var/log/nginx && \
