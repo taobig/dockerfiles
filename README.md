@@ -22,3 +22,9 @@ php.ini settings:
 
 ## build-in application
 /usr/local/bin/composer
+
+
+
+# build manually
+cd {dir}
+docker build -t taobig/php7x .
