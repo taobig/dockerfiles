@@ -104,7 +104,7 @@ RUN sed -i 's/^;date\.timezone[ ]*=[ ]*/date\.timezone = Asia\/Shanghai/' /usr/l
 #    sed -i 's/^;cgi\.fix_pathinfo[ ]*=[ ]*1/cgi\.fix_pathinfo=0/' /usr/local/php/etc/php.ini
 #    sed -i 's/^;security\.limit_extensions .../default setting is safe/' /usr/local/php/etc/php-fpm.d/www.conf  && \
 
-RUN yum -y install git
+RUN apt install -y git
 RUN git clone git://github.com/phalcon/cphalcon.git
 RUN cd cphalcon/build
 RUN ./install  /usr/local/php/bin/phpize --php-config /usr/local/php/bin/php-config
