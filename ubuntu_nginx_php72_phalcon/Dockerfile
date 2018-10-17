@@ -105,9 +105,8 @@ RUN sed -i 's/^;date\.timezone[ ]*=[ ]*/date\.timezone = Asia\/Shanghai/' /usr/l
 #    sed -i 's/^;security\.limit_extensions .../default setting is safe/' /usr/local/php/etc/php-fpm.d/www.conf  && \
 
 RUN apt install -y git
-RUN git clone git://github.com/phalcon/cphalcon.git
-RUN cd cphalcon/build
-RUN ./install  /usr/local/php/bin/phpize --php-config /usr/local/php/bin/php-config
+RUN git clone --depth=1  git://github.com/phalcon/cphalcon.git
+RUN cd cphalcon/build && ./install  /usr/local/php/bin/phpize --php-config /usr/local/php/bin/php-config
 RUN echo "extension=phalcon.so" >> /usr/local/php/etc/php.ini
 
 # phpize need `/usr/local/php/include`
