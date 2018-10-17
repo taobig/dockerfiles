@@ -104,13 +104,13 @@ RUN sed -i 's/^;date\.timezone[ ]*=[ ]*/date\.timezone = Asia\/Shanghai/' /usr/l
 #    sed -i 's/^;cgi\.fix_pathinfo[ ]*=[ ]*1/cgi\.fix_pathinfo=0/' /usr/local/php/etc/php.ini
 #    sed -i 's/^;security\.limit_extensions .../default setting is safe/' /usr/local/php/etc/php-fpm.d/www.conf  && \
 
-RUN apt install -y git
-RUN git clone --depth=1  git://github.com/phalcon/cphalcon.git
-RUN cd cphalcon/build && ./install  /usr/local/php/bin/phpize --php-config /usr/local/php/bin/php-config
-RUN echo "extension=phalcon.so" >> /usr/local/php/etc/php.ini
+#RUN apt install -y git
+#RUN git clone --depth=1  git://github.com/phalcon/cphalcon.git
+#RUN cd cphalcon/build && ./install  /usr/local/php/bin/phpize --php-config /usr/local/php/bin/php-config
+#RUN echo "extension=phalcon.so" >> /usr/local/php/etc/php.ini
 
 # phpize need `/usr/local/php/include`
-RUN rm -rf /usr/local/php/include
+#RUN rm -rf /usr/local/php/include
 RUN wget -c -O composer https://getcomposer.org/download/${COMPOSER_VERSION}/composer.phar
 
 
@@ -193,6 +193,11 @@ ADD start.sh /start.sh
 RUN chmod 755 /start.sh
 
 RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai  /etc/localtime
+
+RUN apt install -y git
+RUN git clone --depth=1  git://github.com/phalcon/cphalcon.git
+#RUN cd cphalcon/build && ./install  /usr/local/php/bin/phpize --php-config /usr/local/php/bin/php-config
+#RUN echo "extension=phalcon.so" >> /usr/local/php/etc/php.ini
 
 WORKDIR /app
 #VOLUME ["/usr/local/nginx/html", "/usr/local/nginx/conf/ssl", "/usr/local/nginx/conf/vhost", "/usr/local/php/etc/php.d"]
