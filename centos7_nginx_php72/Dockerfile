@@ -2,8 +2,8 @@ FROM centos:7.5.1804 AS build-env
 #MAINTAINER taobig
 
 ENV NGINX_VERSION 1.14.0
-ENV PHP_VERSION 7.2.6
-ENV COMPOSER_VERSION 1.6.5
+ENV PHP_VERSION 7.2.10
+ENV COMPOSER_VERSION 1.7.2
 
 #if not set WORKDIR, each RUN & CMD & ADD & COPY ... need to run `cd /usr/local/src`
 WORKDIR /usr/local/src
@@ -17,12 +17,14 @@ WORKDIR /usr/local/src
 #   Cannot create cache directory /home/www/.composer/cache/repo/https---packagist.org/, or directory is not writable. Proceeding without cache
 #   Cannot create cache directory /home/www/.composer/cache/files/, or directory is not writable. Proceeding without cache
 # for php pecl install *** autoconf
+RUN yum install -y epel-release
 RUN yum install -y \
     gcc gcc-c++ make wget \
-    zlib-devel openssl-devel pcre-devel libxml2-devel libcurl-devel gd-devel libpng-devel libjpeg-devel freetype-devel \
+    zlib-devel openssl-devel pcre-devel libxml2-devel libcurl-devel gd-devel libpng-devel libjpeg-devel freetype-devel libzip-devel \
+    re2c \
     autoconf   > /dev/null&& \
-    useradd -m -s /sbin/nologin www && \
- wget -c -O nginx.tar.gz http://nginx.org/download/nginx-$NGINX_VERSION.tar.gz && \
+    useradd -m -s /sbin/nologin www
+RUN wget -c -O nginx.tar.gz http://nginx.org/download/nginx-$NGINX_VERSION.tar.gz && \
  tar -zxf nginx.tar.gz && rm -f nginx.tar.gz && \
      cd nginx-$NGINX_VERSION && \
     ./configure --prefix=/usr/local/nginx \
@@ -39,9 +41,9 @@ RUN yum install -y \
     --with-http_ssl_module \
     --with-http_gzip_static_module \
     --with-http_stub_status_module && \
-    make -j4 > /dev/null && make install && cd .. && \
- wget -c -O php.tar.gz http://php.net/distributions/php-$PHP_VERSION.tar.gz && \
- tar zxf php.tar.gz && rm -f php.tar.gz && \
+    make -j4 > /dev/null && make install
+RUN wget -c -O php.tar.gz http://php.net/distributions/php-$PHP_VERSION.tar.gz
+RUN tar zxf php.tar.gz && rm -f php.tar.gz && \
      cd php-$PHP_VERSION && \
     ./configure --prefix=/usr/local/php \
     --with-config-file-path=/usr/local/php/etc \
