@@ -198,11 +198,6 @@ RUN chmod 755 /start.sh
 
 RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai  /etc/localtime
 
-RUN apt install -y git
-RUN git clone --depth=1  git://github.com/phalcon/cphalcon.git
-#RUN cd cphalcon/build && ./install  /usr/local/php/bin/phpize --php-config /usr/local/php/bin/php-config
-#RUN echo "extension=phalcon.so" >> /usr/local/php/etc/php.ini
-
 WORKDIR /app
 #VOLUME ["/usr/local/nginx/html", "/usr/local/nginx/conf/ssl", "/usr/local/nginx/conf/vhost", "/usr/local/php/etc/php.d"]
 VOLUME ["/app"]
