@@ -2,8 +2,8 @@ FROM ubuntu:18.04 AS build-env
 
 ENV NGINX_VERSION 1.14.0
 #ENV PHP_VERSION 7.2.10
-ENV PHP_VERSION 7.3.0RC3
-ENV COMPOSER_VERSION 1.7.2
+ENV PHP_VERSION 7.3.0RC4
+ENV COMPOSER_VERSION 1.7.3
 
 #if not set WORKDIR, each RUN & CMD & ADD & COPY ... need to run `cd /usr/local/src`
 WORKDIR /usr/local/src
@@ -194,6 +194,7 @@ RUN chmod 755 /start.sh
 
 RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai  /etc/localtime
 
+RUN apt-get update && apt-get install -y vim
 WORKDIR /app
 #VOLUME ["/usr/local/nginx/html", "/usr/local/nginx/conf/ssl", "/usr/local/nginx/conf/vhost", "/usr/local/php/etc/php.d"]
 VOLUME ["/app"]
