@@ -29,8 +29,8 @@ RUN tar -zxf nginx.tar.gz && rm -f nginx.tar.gz && \
      cd nginx-$NGINX_VERSION && \
     ./configure --prefix=/usr/local/nginx \
     --user=www --group=www \
-    --error-log-path=/var/log/nginx/error.log \
-    --http-log-path=/var/log/nginx/access.log \
+#    --error-log-path=/var/log/nginx/error.log \
+#    --http-log-path=/var/log/nginx/access.log \
     --pid-path=/var/run/nginx.pid \
     --with-pcre \
     --with-http_ssl_module \
