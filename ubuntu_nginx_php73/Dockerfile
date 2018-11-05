@@ -192,7 +192,7 @@ RUN chmod +x /usr/local/bin/composer
 ADD start.sh /start.sh
 RUN chmod 755 /start.sh
 
-RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai  /etc/localtime
+RUN apt-get install -y tzdata && ln -sf /usr/share/zoneinfo/Asia/Shanghai  /etc/localtime && dpkg-reconfigure -f noninteractive tzdata
 
 RUN apt-get update && apt-get install -y vim
 WORKDIR /app
