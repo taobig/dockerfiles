@@ -107,6 +107,7 @@ RUN ln  -s  /usr/local/php/bin/php    /usr/local/bin/php && \
     ln  -s  /usr/local/php/bin/pecl    /usr/local/bin/pecl && \
     ln  -s  /usr/local/php/bin/php-config    /usr/local/bin/php-config
 
+# pecl install swoole-2.0.12
 RUN pecl install swoole && \
     echo "extension=swoole.so" >> /usr/local/php/etc/php.ini && \
     echo '' | pecl install redis && \
