@@ -58,7 +58,7 @@ RUN tar zxf php.tar.gz && rm -f php.tar.gz && \
     --with-config-file-path=/usr/local/php/etc \
     --with-config-file-scan-dir=/usr/local/php/etc/php.d \
     --with-fpm-user=www \
-    --with-fpm-group=www \docke
+    --with-fpm-group=www \
     --with-mysqli \
     --with-pdo-mysql \
     --with-openssl \
