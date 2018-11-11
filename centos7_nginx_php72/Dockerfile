@@ -17,11 +17,11 @@ WORKDIR /usr/local/src
 #   Cannot create cache directory /home/www/.composer/cache/repo/https---packagist.org/, or directory is not writable. Proceeding without cache
 #   Cannot create cache directory /home/www/.composer/cache/files/, or directory is not writable. Proceeding without cache
 # for php pecl install *** autoconf
-# libzip-devel 改为自行编译
 RUN yum install -y epel-release
 RUN yum install -y \
     gcc gcc-c++ make wget \
     zlib-devel openssl-devel pcre-devel libxml2-devel libcurl-devel gd-devel libpng-devel libjpeg-devel freetype-devel \
+    libzip-devel \
     re2c \
     autoconf   > /dev/null
 RUN useradd -m -s /sbin/nologin www
@@ -44,22 +44,21 @@ RUN wget -c -O nginx.tar.gz http://nginx.org/download/nginx-$NGINX_VERSION.tar.g
     --with-http_stub_status_module && \
     make -j4 > /dev/null && make install
 RUN wget -c -O php.tar.gz http://php.net/distributions/php-$PHP_VERSION.tar.gz
-
-ADD cmake-3.12.4.tar.gz .
-RUN cd cmake-3.12.4 &&  ./bootstrap && make && make install
-RUN  whereis cmake
-RUN  cmake -version
-
-ADD libzip-1.5.1.tar.gz .
-RUN cd libzip-1.5.1 && mkdir build && cd build && cmake .. && make && make install
-RUN whereis libzip
+#ADD cmake-3.12.4.tar.gz .
+#RUN cd cmake-3.12.4 &&  ./bootstrap && make && make install
+#RUN  whereis cmake
+#RUN  cmake -version
+#
+#ADD libzip-1.5.1.tar.gz .
+#RUN cd libzip-1.5.1 && mkdir build && cd build && cmake .. && make && make install
+#RUN whereis libzip
 RUN tar zxf php.tar.gz && rm -f php.tar.gz && \
      cd php-$PHP_VERSION && \
     ./configure --prefix=/usr/local/php \
     --with-config-file-path=/usr/local/php/etc \
     --with-config-file-scan-dir=/usr/local/php/etc/php.d \
     --with-fpm-user=www \
-    --with-fpm-group=www \
+    --with-fpm-group=www \docke
     --with-mysqli \
     --with-pdo-mysql \
     --with-openssl \
