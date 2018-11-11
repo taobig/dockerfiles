@@ -52,6 +52,13 @@ RUN wget -c -O php.tar.gz http://php.net/distributions/php-$PHP_VERSION.tar.gz
 #ADD libzip-1.5.1.tar.gz .
 #RUN cd libzip-1.5.1 && mkdir build && cd build && cmake .. && make && make install
 #RUN whereis libzip
+
+RUN whereis bison
+ADD bison-3.2.1.tar.gz .
+RUN cd bison-3.2.1 && ./configure && make && make install
+RUN whereis bison
+RUN bison -V
+
 RUN tar zxf php.tar.gz && rm -f php.tar.gz && \
      cd php-$PHP_VERSION && \
     ./configure --prefix=/usr/local/php \
