@@ -1,9 +1,9 @@
 FROM centos:7.5.1804 AS build-env
 #MAINTAINER taobig
 
-ENV NGINX_VERSION 1.14.0
-ENV PHP_VERSION 7.2.11
-ENV COMPOSER_VERSION 1.7.2
+ENV NGINX_VERSION 1.14.1
+ENV PHP_VERSION 7.2.12
+ENV COMPOSER_VERSION 1.7.3
 
 #if not set WORKDIR, each RUN & CMD & ADD & COPY ... need to run `cd /usr/local/src`
 WORKDIR /usr/local/src
@@ -17,13 +17,14 @@ WORKDIR /usr/local/src
 #   Cannot create cache directory /home/www/.composer/cache/repo/https---packagist.org/, or directory is not writable. Proceeding without cache
 #   Cannot create cache directory /home/www/.composer/cache/files/, or directory is not writable. Proceeding without cache
 # for php pecl install *** autoconf
+# libzip-devel 改为自行编译
 RUN yum install -y epel-release
 RUN yum install -y \
     gcc gcc-c++ make wget \
-    zlib-devel openssl-devel pcre-devel libxml2-devel libcurl-devel gd-devel libpng-devel libjpeg-devel freetype-devel libzip-devel \
+    zlib-devel openssl-devel pcre-devel libxml2-devel libcurl-devel gd-devel libpng-devel libjpeg-devel freetype-devel \
     re2c \
-    autoconf   > /dev/null&& \
-    useradd -m -s /sbin/nologin www
+    autoconf   > /dev/null
+RUN useradd -m -s /sbin/nologin www
 RUN wget -c -O nginx.tar.gz http://nginx.org/download/nginx-$NGINX_VERSION.tar.gz && \
  tar -zxf nginx.tar.gz && rm -f nginx.tar.gz && \
      cd nginx-$NGINX_VERSION && \
@@ -43,6 +44,15 @@ RUN wget -c -O nginx.tar.gz http://nginx.org/download/nginx-$NGINX_VERSION.tar.g
     --with-http_stub_status_module && \
     make -j4 > /dev/null && make install
 RUN wget -c -O php.tar.gz http://php.net/distributions/php-$PHP_VERSION.tar.gz
+
+ADD cmake-3.12.4.tar.gz .
+RUN cd cmake-3.12.4 &&  ./bootstrap && make && make install
+RUN  whereis cmake
+RUN  cmake -version
+
+ADD libzip-1.5.1.tar.gz .
+RUN cd libzip-1.5.1 && mkdir build && cd build && cmake .. && make && make install
+RUN whereis libzip
 RUN tar zxf php.tar.gz && rm -f php.tar.gz && \
      cd php-$PHP_VERSION && \
     ./configure --prefix=/usr/local/php \
