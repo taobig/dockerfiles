@@ -23,7 +23,7 @@ RUN yum install -y \
     zlib-devel openssl-devel pcre-devel libxml2-devel libcurl-devel gd-devel libpng-devel libjpeg-devel freetype-devel \
     libzip-devel \
     re2c \
-    autoconf   > /dev/null
+    autoconf
 RUN useradd -m -s /sbin/nologin www
 RUN wget -c -O nginx.tar.gz http://nginx.org/download/nginx-$NGINX_VERSION.tar.gz && \
  tar -zxf nginx.tar.gz && rm -f nginx.tar.gz && \
@@ -92,7 +92,7 @@ RUN cd php-${PHP_VERSION} && \
     --disable-cgi \
     --disable-phpdbg
 
-RUN cd php-${PHP_VERSION} && make -j4 > /dev/null && make install && cd .. && \
+RUN cd php-${PHP_VERSION} && make -j4 && make install && cd .. && \
     cp ./php-${PHP_VERSION}/php.ini-production /usr/local/php/etc/php.ini && \
     mv /usr/local/php/etc/php-fpm.conf.default /usr/local/php/etc/php-fpm.conf && \
     mv /usr/local/php/etc/php-fpm.d/www.conf.default /usr/local/php/etc/php-fpm.d/www.conf  && \
