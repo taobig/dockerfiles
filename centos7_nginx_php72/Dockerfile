@@ -92,7 +92,7 @@ RUN tar zxf php.tar.gz && rm -f php.tar.gz && \
     --disable-cgi \
     --disable-phpdbg
 
-RUN make -j4 > /dev/null && make install && cd .. && \
+RUN cd php-$PHP_VERSION && make -j4 > /dev/null && make install && cd .. && \
     cp ./php-$PHP_VERSION/php.ini-production /usr/local/php/etc/php.ini && \
     mv /usr/local/php/etc/php-fpm.conf.default /usr/local/php/etc/php-fpm.conf && \
     mv /usr/local/php/etc/php-fpm.d/www.conf.default /usr/local/php/etc/php-fpm.d/www.conf  && \
