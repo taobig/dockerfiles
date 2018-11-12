@@ -43,7 +43,7 @@ RUN wget -c -O nginx.tar.gz http://nginx.org/download/nginx-$NGINX_VERSION.tar.g
     --with-http_gzip_static_module \
     --with-http_stub_status_module && \
     make -j4 > /dev/null && make install
-RUN wget -c -O php.tar.gz http://php.net/distributions/php-$PHP_VERSION.tar.gz
+RUN wget -c -O php.tar.gz http://php.net/distributions/php-${PHP_VERSION}.tar.gz
 #ADD cmake-3.12.4.tar.gz .
 #RUN cd cmake-3.12.4 &&  ./bootstrap && make && make install
 #RUN  whereis cmake
@@ -59,8 +59,8 @@ RUN cd bison-3.2.1 && ./configure && make && make install
 RUN whereis bison
 RUN bison -V
 
-RUN tar zxf php.tar.gz && rm -f php.tar.gz && \
-     cd php-$PHP_VERSION && \
+RUN tar zxf php.tar.gz
+RUN cd php-${PHP_VERSION} && \
     ./configure --prefix=/usr/local/php \
     --with-config-file-path=/usr/local/php/etc \
     --with-config-file-scan-dir=/usr/local/php/etc/php.d \
@@ -92,8 +92,8 @@ RUN tar zxf php.tar.gz && rm -f php.tar.gz && \
     --disable-cgi \
     --disable-phpdbg
 
-RUN cd php-$PHP_VERSION && make -j4 > /dev/null && make install && cd .. && \
-    cp ./php-$PHP_VERSION/php.ini-production /usr/local/php/etc/php.ini && \
+RUN cd php-${PHP_VERSION} && make -j4 > /dev/null && make install && cd .. && \
+    cp ./php-${PHP_VERSION}/php.ini-production /usr/local/php/etc/php.ini && \
     mv /usr/local/php/etc/php-fpm.conf.default /usr/local/php/etc/php-fpm.conf && \
     mv /usr/local/php/etc/php-fpm.d/www.conf.default /usr/local/php/etc/php-fpm.d/www.conf  && \
     strip /usr/local/php/bin/php && \
