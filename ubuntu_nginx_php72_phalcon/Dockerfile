@@ -191,12 +191,10 @@ RUN useradd -m -s /sbin/nologin www && \
 #overwrite nginx.conf
 ADD conf/nginx.conf /usr/local/nginx/conf/nginx.conf
 ADD conf/default_server.conf /etc/nginx/conf.d/default_server.conf
-
-RUN chmod +x /usr/local/bin/composer
 ADD start.sh /start.sh
-RUN chmod 755 /start.sh
 
-RUN apt-get update && apt-get install -y tzdata && apt-get clean && ln -sf /usr/share/zoneinfo/Asia/Shanghai  /etc/localtime && dpkg-reconfigure -f noninteractive tzdata
+RUN chmod +x /usr/local/bin/composer && chmod 755 /start.sh
+RUN apt-get update && apt-get install -y tzdata vim && apt-get clean && ln -sf /usr/share/zoneinfo/Asia/Shanghai  /etc/localtime && dpkg-reconfigure -f noninteractive tzdata
 
 WORKDIR /app
 #VOLUME ["/usr/local/nginx/html", "/usr/local/nginx/conf/ssl", "/usr/local/nginx/conf/vhost", "/usr/local/php/etc/php.d"]
