@@ -1,7 +1,7 @@
 FROM ubuntu:18.04 AS build-env
 
 ENV NGINX_VERSION 1.14.1
-ENV PHP_VERSION 7.2.11
+ENV PHP_VERSION 7.2.12
 ENV COMPOSER_VERSION 1.7.3
 
 #if not set WORKDIR, each RUN & CMD & ADD & COPY ... need to run `cd /usr/local/src`
@@ -100,7 +100,10 @@ RUN sed -i 's/^;date\.timezone[ ]*=[ ]*/date\.timezone = Asia\/Shanghai/' /usr/l
     sed -i 's/^listen = 127\.0\.0\.1:9000/listen = \/var\/run\/php-fpm\.sock/' /usr/local/php/etc/php-fpm.d/www.conf  && \
     sed -i 's/^;listen.owner = www/listen.owner = www/' /usr/local/php/etc/php-fpm.d/www.conf  && \
     sed -i 's/^;listen.group = www/listen.group = www/' /usr/local/php/etc/php-fpm.d/www.conf  && \
-    sed -i 's/^;listen.mode = 0660/listen.mode = 0660/' /usr/local/php/etc/php-fpm.d/www.conf
+    sed -i 's/^;listen.mode = 0660/listen.mode = 0660/' /usr/local/php/etc/php-fpm.d/www.conf  && \
+    sed -i 's/^pm.max_children = 5/pm.max_children = 10/' /usr/local/php/etc/php-fpm.d/www.conf  && \
+    sed -i 's/^pm.max_spare_servers = 3/pm.max_spare_servers = 9/' /usr/local/php/etc/php-fpm.d/www.conf  && \
+    sed -i 's/^pm.start_servers = 2/pm.start_servers = 5/' /usr/local/php/etc/php-fpm.d/www.conf
 #    sed -i 's/^;cgi\.fix_pathinfo[ ]*=[ ]*1/cgi\.fix_pathinfo=0/' /usr/local/php/etc/php.ini
 #    sed -i 's/^;security\.limit_extensions .../default setting is safe/' /usr/local/php/etc/php-fpm.d/www.conf  && \
 
@@ -182,10 +185,9 @@ RUN useradd -m -s /sbin/nologin www && \
 #overwrite nginx.conf
 ADD conf/nginx.conf /usr/local/nginx/conf/nginx.conf
 ADD conf/default_server.conf /etc/nginx/conf.d/default_server.conf
-
-RUN chmod +x /usr/local/bin/composer
 ADD start.sh /start.sh
-RUN chmod 755 /start.sh
+
+RUN chmod +x /usr/local/bin/composer && chmod 755 /start.sh
 
 RUN apt-get update && apt-get install -y tzdata && apt-get clean && ln -sf /usr/share/zoneinfo/Asia/Shanghai  /etc/localtime && dpkg-reconfigure -f noninteractive tzdata
 
