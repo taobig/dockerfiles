@@ -2,7 +2,7 @@ FROM ubuntu:18.04 AS build-env
 
 ENV NGINX_VERSION 1.14.1
 ENV PHP_VERSION 7.2.12
-ENV COMPOSER_VERSION 1.7.3
+#ENV COMPOSER_VERSION 1.7.3
 
 #if not set WORKDIR, each RUN & CMD & ADD & COPY ... need to run `cd /usr/local/src`
 WORKDIR /usr/local/src
@@ -109,13 +109,13 @@ RUN sed -i 's/^;date\.timezone[ ]*=[ ]*/date\.timezone = Asia\/Shanghai/' /usr/l
 
 # phpize need `/usr/local/php/include`
 RUN rm -rf /usr/local/php/include
-RUN wget -c -O composer https://getcomposer.org/download/${COMPOSER_VERSION}/composer.phar
+#RUN wget -c -O composer https://getcomposer.org/download/${COMPOSER_VERSION}/composer.phar
 
 
 FROM ubuntu:18.04
 COPY --from=build-env /usr/local/nginx /usr/local/nginx
 COPY --from=build-env /usr/local/php /usr/local/php
-COPY --from=build-env /usr/local/src/composer /usr/local/bin/composer
+#COPY --from=build-env /usr/local/src/composer /usr/local/bin/composer
 
 
 COPY --from=build-env /lib/x86_64-linux-gnu/liblzma.so.5  /lib/x86_64-linux-gnu/liblzma.so.5
@@ -187,8 +187,9 @@ ADD conf/nginx.conf /usr/local/nginx/conf/nginx.conf
 ADD conf/default_server.conf /etc/nginx/conf.d/default_server.conf
 ADD start.sh /start.sh
 
-RUN chmod +x /usr/local/bin/composer && chmod 755 /start.sh
-
+#RUN chmod +x /usr/local/bin/composer && chmod 755 /start.sh
+RUN chmod 755 /start.sh
+# 有了apt-get install 后，从68 MB => 87 MB
 RUN apt-get update && apt-get install -y tzdata && apt-get clean && ln -sf /usr/share/zoneinfo/Asia/Shanghai  /etc/localtime && dpkg-reconfigure -f noninteractive tzdata
 
 WORKDIR /app
