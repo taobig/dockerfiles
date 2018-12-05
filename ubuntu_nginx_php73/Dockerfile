@@ -12,7 +12,7 @@ RUN apt-get update
 RUN apt-get install -y wget
 # 16.04 libreadline6-dev
 # 18.04 libreadline-dev  add: libzip-dev
-RUN apt-get install -y build-essential autoconf make automake bison re2c libxml2-dev libssl-dev libfreetype6-dev libcurl4-gnutls-dev libjpeg-dev libpng-dev libreadline-dev  pkg-config libzip-dev libmm-dev
+RUN apt-get install -y build-essential autoconf make automake bison re2c libxml2-dev libssl-dev libfreetype6-dev libcurl4-gnutls-dev libjpeg-dev libpng-dev libreadline-dev  pkg-config libzip-dev
 
 #Add user  && download php and nginx source code
 #    groupadd -r www && \
@@ -75,7 +75,6 @@ RUN tar zxf php.tar.gz && rm -f php.tar.gz && \
     --enable-bcmath \
     --enable-exif \
     --enable-pcntl \
-    --with-mm=DIR \
     --disable-cgi \
     --disable-phpdbg \
     && \
@@ -101,7 +100,6 @@ RUN sed -i 's/^;date\.timezone[ ]*=[ ]*/date\.timezone = Asia\/Shanghai/' /usr/l
     sed -i 's/^memory_limit = 128M/memory_limit = 128M/' /usr/local/php/etc/php.ini && \
     sed -i 's/^expose_php = On/expose_php = Off/' /usr/local/php/etc/php.ini && \
     sed -i 's/^upload_max_filesize = 2M/upload_max_filesize = 20M/' /usr/local/php/etc/php.ini && \
-    sed -i 's/^session.save_handler = files/session.save_handler = mm/' /usr/local/php/etc/php.ini && \
     sed -i 's/^listen = 127\.0\.0\.1:9000/listen = \/var\/run\/php-fpm\.sock/' /usr/local/php/etc/php-fpm.d/www.conf  && \
     sed -i 's/^;listen.owner = www/listen.owner = www/' /usr/local/php/etc/php-fpm.d/www.conf  && \
     sed -i 's/^;listen.group = www/listen.group = www/' /usr/local/php/etc/php-fpm.d/www.conf  && \
@@ -175,8 +173,6 @@ COPY --from=build-env /usr/lib/x86_64-linux-gnu/libffi.so.6   /usr/lib/x86_64-li
 COPY --from=build-env /usr/lib/x86_64-linux-gnu/libheimntlm.so.0   /usr/lib/x86_64-linux-gnu/libheimntlm.so.0
 # 18.04 add:
 COPY --from=build-env  /usr/lib/x86_64-linux-gnu/libzip.so.4    /usr/lib/x86_64-linux-gnu/libzip.so.4
-# libmm
-COPY --from=build-env /usr/lib/libmm.so.14  /usr/lib/libmm.so.14
 
 RUN useradd -m -s /sbin/nologin www && \
     mkdir /var/log/nginx && \
