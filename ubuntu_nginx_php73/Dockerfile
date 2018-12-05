@@ -3,7 +3,7 @@ FROM ubuntu:18.04 AS build-env
 ENV NGINX_VERSION 1.14.1
 #ENV PHP_VERSION 7.2.10
 ENV PHP_VERSION 7.3.0RC6
-ENV COMPOSER_VERSION 1.7.3
+ENV COMPOSER_VERSION 1.8.0
 
 #if not set WORKDIR, each RUN & CMD & ADD & COPY ... need to run `cd /usr/local/src`
 WORKDIR /usr/local/src
@@ -101,6 +101,7 @@ RUN sed -i 's/^;date\.timezone[ ]*=[ ]*/date\.timezone = Asia\/Shanghai/' /usr/l
     sed -i 's/^memory_limit = 128M/memory_limit = 128M/' /usr/local/php/etc/php.ini && \
     sed -i 's/^expose_php = On/expose_php = Off/' /usr/local/php/etc/php.ini && \
     sed -i 's/^upload_max_filesize = 2M/upload_max_filesize = 20M/' /usr/local/php/etc/php.ini && \
+    sed -i 's/^session.save_handler = file/session.save_handler = mm/' /usr/local/php/etc/php.ini && \
     sed -i 's/^listen = 127\.0\.0\.1:9000/listen = \/var\/run\/php-fpm\.sock/' /usr/local/php/etc/php-fpm.d/www.conf  && \
     sed -i 's/^;listen.owner = www/listen.owner = www/' /usr/local/php/etc/php-fpm.d/www.conf  && \
     sed -i 's/^;listen.group = www/listen.group = www/' /usr/local/php/etc/php-fpm.d/www.conf  && \
@@ -174,6 +175,8 @@ COPY --from=build-env /usr/lib/x86_64-linux-gnu/libffi.so.6   /usr/lib/x86_64-li
 COPY --from=build-env /usr/lib/x86_64-linux-gnu/libheimntlm.so.0   /usr/lib/x86_64-linux-gnu/libheimntlm.so.0
 # 18.04 add:
 COPY --from=build-env  /usr/lib/x86_64-linux-gnu/libzip.so.4    /usr/lib/x86_64-linux-gnu/libzip.so.4
+# libmm
+COPY --from=build-env /usr/lib/libmm.so.14  /usr/lib/libmm.so.14
 
 RUN useradd -m -s /sbin/nologin www && \
     mkdir /var/log/nginx && \
@@ -188,10 +191,9 @@ RUN useradd -m -s /sbin/nologin www && \
 #overwrite nginx.conf
 ADD conf/nginx.conf /usr/local/nginx/conf/nginx.conf
 ADD conf/default_server.conf /etc/nginx/conf.d/default_server.conf
-
-RUN chmod +x /usr/local/bin/composer
 ADD start.sh /start.sh
-RUN chmod 755 /start.sh
+
+RUN chmod +x /usr/local/bin/composer && chmod 755 /start.sh
 
 RUN apt-get update && apt-get install -y tzdata vim && apt-get clean && \
     ln -sf /usr/share/zoneinfo/Asia/Shanghai  /etc/localtime && dpkg-reconfigure -f noninteractive tzdata
