@@ -1,8 +1,8 @@
 FROM ubuntu:18.04 AS build-env
 
-ENV NGINX_VERSION 1.14.1
-ENV PHP_VERSION 7.2.12
-#ENV COMPOSER_VERSION 1.7.3
+ENV NGINX_VERSION 1.14.2
+ENV PHP_VERSION 7.2.13
+#ENV COMPOSER_VERSION 1.8.0
 
 #if not set WORKDIR, each RUN & CMD & ADD & COPY ... need to run `cd /usr/local/src`
 WORKDIR /usr/local/src
