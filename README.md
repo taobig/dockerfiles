@@ -3,7 +3,7 @@
 ## tags
 1. **latest** , **7.2**  `CentOS 7.5.1804 + nginx 1.14 + PHP 7.2-FPM`  
 1. **7.1**  `CentOS 7.5.1804 + nginx 1.14 + PHP 7.1-FPM`  
-1. **7.0**  `CentOS 7.4.1708 + nginx 1.12 + PHP 7.0.30-FPM`  **no longer update**   
+1. **7.0**  `CentOS 7.4.1708 + nginx 1.12.2 + PHP 7.0.33-FPM`  **End of life**   
 
 ## usage
 docker run --name ${container_name} -p ${expose_port}:80  -v ${custom_nginx_conf_dir}:/etc/nginx/conf.d -v ${code_dir}:/app  -d  taobig/nginx-php7-fpm:latest  

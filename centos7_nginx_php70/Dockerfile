@@ -1,9 +1,8 @@
 FROM centos:7.4.1708 AS build-env
-#MAINTAINER taobig
 
 ENV NGINX_VERSION 1.12.2
-ENV PHP_VERSION 7.0.30
-ENV COMPOSER_VERSION 1.6.5
+ENV PHP_VERSION 7.0.33
+ENV COMPOSER_VERSION 1.8.0
 
 #if not set WORKDIR, each RUN & CMD & ADD & COPY ... need to run `cd /usr/local/src`
 WORKDIR /usr/local/src
@@ -180,11 +179,7 @@ WORKDIR /app
 #VOLUME ["/usr/local/nginx/html", "/usr/local/nginx/conf/ssl", "/usr/local/nginx/conf/vhost", "/usr/local/php/etc/php.d"]
 VOLUME ["/app"]
 
-#Set port
 EXPOSE 80 443
 
-#Start it
 ENTRYPOINT ["/start.sh"]
 
-#Start web server
-#CMD ["/bin/bash", "/start.sh"]
