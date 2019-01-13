@@ -1,9 +1,9 @@
 FROM centos:7.5.1804 AS build-env
 #MAINTAINER taobig
 
-ENV NGINX_VERSION 1.14.0
-ENV PHP_VERSION 7.1.18
-ENV COMPOSER_VERSION 1.6.5
+ENV NGINX_VERSION 1.14.1
+ENV PHP_VERSION 7.1.26
+ENV COMPOSER_VERSION 1.8.0
 
 #if not set WORKDIR, each RUN & CMD & ADD & COPY ... need to run `cd /usr/local/src`
 WORKDIR /usr/local/src
@@ -17,12 +17,15 @@ WORKDIR /usr/local/src
 #   Cannot create cache directory /home/www/.composer/cache/repo/https---packagist.org/, or directory is not writable. Proceeding without cache
 #   Cannot create cache directory /home/www/.composer/cache/files/, or directory is not writable. Proceeding without cache
 # for php pecl install *** autoconf
+RUN yum install -y epel-release
 RUN yum install -y \
     gcc gcc-c++ make wget \
     zlib-devel openssl-devel pcre-devel libxml2-devel libcurl-devel gd-devel libpng-devel libjpeg-devel freetype-devel \
-    autoconf   > /dev/null&& \
-    useradd -m -s /sbin/nologin www && \
- wget -c -O nginx.tar.gz http://nginx.org/download/nginx-$NGINX_VERSION.tar.gz && \
+    libzip-devel \
+    re2c \
+    autoconf
+RUN useradd -m -s /sbin/nologin www
+RUN wget -c -O nginx.tar.gz http://nginx.org/download/nginx-$NGINX_VERSION.tar.gz && \
  tar -zxf nginx.tar.gz && rm -f nginx.tar.gz && \
      cd nginx-$NGINX_VERSION && \
     ./configure --prefix=/usr/local/nginx \
@@ -39,10 +42,25 @@ RUN yum install -y \
     --with-http_ssl_module \
     --with-http_gzip_static_module \
     --with-http_stub_status_module && \
-    make -j4 > /dev/null && make install && cd .. && \
- wget -c -O php.tar.gz http://php.net/distributions/php-$PHP_VERSION.tar.gz && \
- tar zxf php.tar.gz && rm -f php.tar.gz && \
-     cd php-$PHP_VERSION && \
+    make -j4 > /dev/null && make install
+RUN wget -c -O php.tar.gz http://php.net/distributions/php-${PHP_VERSION}.tar.gz
+#ADD cmake-3.12.4.tar.gz .
+#RUN cd cmake-3.12.4 &&  ./bootstrap && make && make install
+#RUN  whereis cmake
+#RUN  cmake -version
+#
+#ADD libzip-1.5.1.tar.gz .
+#RUN cd libzip-1.5.1 && mkdir build && cd build && cmake .. && make && make install
+#RUN whereis libzip
+
+RUN whereis bison
+ADD bison-3.2.1.tar.gz .
+RUN cd bison-3.2.1 && ./configure && make && make install
+RUN whereis bison
+RUN bison -V
+
+RUN tar zxf php.tar.gz
+RUN cd php-${PHP_VERSION} && \
     ./configure --prefix=/usr/local/php \
     --with-config-file-path=/usr/local/php/etc \
     --with-config-file-scan-dir=/usr/local/php/etc/php.d \
@@ -72,10 +90,10 @@ RUN yum install -y \
     --enable-exif \
     --enable-pcntl \
     --disable-cgi \
-    --disable-phpdbg \
-    && \
-    make -j4 > /dev/null && make install && cd .. && \
-    cp ./php-$PHP_VERSION/php.ini-production /usr/local/php/etc/php.ini && \
+    --disable-phpdbg
+
+RUN cd php-${PHP_VERSION} && make -j4 && make install && cd .. && \
+    cp ./php-${PHP_VERSION}/php.ini-production /usr/local/php/etc/php.ini && \
     mv /usr/local/php/etc/php-fpm.conf.default /usr/local/php/etc/php-fpm.conf && \
     mv /usr/local/php/etc/php-fpm.d/www.conf.default /usr/local/php/etc/php-fpm.d/www.conf  && \
     strip /usr/local/php/bin/php && \
@@ -86,7 +104,7 @@ RUN yum install -y \
 #    --disable-ctype \
 #    --enable-shmop \
 #    --enable-sysvsem \
-#    --enable-ftp
+#    --enable-ftp \
 #   --without-pear    will remove pecl
 
 RUN sed -i 's/^;date\.timezone[ ]*=[ ]*/date\.timezone = Asia\/Shanghai/' /usr/local/php/etc/php.ini  && \
