@@ -1,7 +1,7 @@
 FROM ubuntu:18.04 AS build-env
 
 ENV NGINX_VERSION 1.14.2
-ENV PHP_VERSION 7.3.0
+ENV PHP_VERSION 7.3.1
 ENV COMPOSER_VERSION 1.8.0
 
 #if not set WORKDIR, each RUN & CMD & ADD & COPY ... need to run `cd /usr/local/src`
@@ -23,9 +23,9 @@ RUN apt-get install -y build-essential autoconf make automake bison re2c libxml2
 #   Cannot create cache directory /home/www/.composer/cache/files/, or directory is not writable. Proceeding without cache
 # for php pecl install *** autoconf
 RUN useradd -m -s /sbin/nologin www
-RUN wget -c -O nginx.tar.gz http://nginx.org/download/nginx-$NGINX_VERSION.tar.gz
+RUN wget -c -O nginx.tar.gz http://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz
 RUN tar -zxf nginx.tar.gz && rm -f nginx.tar.gz && \
-     cd nginx-$NGINX_VERSION && \
+     cd nginx-${NGINX_VERSION} && \
     ./configure --prefix=/usr/local/nginx \
     --user=www --group=www \
 #    --error-log-path=/var/log/nginx/error.log \
@@ -42,9 +42,9 @@ RUN tar -zxf nginx.tar.gz && rm -f nginx.tar.gz && \
     --with-http_stub_status_module && \
     make -j4 > /dev/null && make install
 
-RUN wget -c -O php.tar.gz http://php.net/distributions/php-$PHP_VERSION.tar.gz
+RUN wget -c -O php.tar.gz http://php.net/distributions/php-${PHP_VERSION}.tar.gz
 RUN tar zxf php.tar.gz && rm -f php.tar.gz && \
-     cd php-$PHP_VERSION && \
+     cd php-${PHP_VERSION} && \
     ./configure --prefix=/usr/local/php \
     --with-config-file-path=/usr/local/php/etc \
     --with-config-file-scan-dir=/usr/local/php/etc/php.d \
@@ -78,7 +78,7 @@ RUN tar zxf php.tar.gz && rm -f php.tar.gz && \
     && \
     make -j4 > /dev/null && make install;
 
-RUN cp ./php-$PHP_VERSION/php.ini-production /usr/local/php/etc/php.ini && \
+RUN cp ./php-${PHP_VERSION}/php.ini-production /usr/local/php/etc/php.ini && \
     mv /usr/local/php/etc/php-fpm.conf.default /usr/local/php/etc/php-fpm.conf && \
     mv /usr/local/php/etc/php-fpm.d/www.conf.default /usr/local/php/etc/php-fpm.d/www.conf  && \
     strip /usr/local/php/bin/php && \
