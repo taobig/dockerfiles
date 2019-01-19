@@ -32,12 +32,12 @@ RUN tar -zxf nginx.tar.gz && rm -f nginx.tar.gz && \
 #    --http-log-path=/var/log/nginx/access.log \
     --pid-path=/var/run/nginx.pid \
     --with-pcre \
-    --with-http_ssl_module \
     --without-mail_pop3_module \
     --without-mail_imap_module \
     --without-mail_smtp_module \
     --with-http_v2_module \
     --with-http_ssl_module \
+    --with-http_mirror_module \
     --with-http_gzip_static_module \
     --with-http_stub_status_module && \
     make -j4 > /dev/null && make install
