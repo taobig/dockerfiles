@@ -1,6 +1,6 @@
 FROM centos:7.4.1708 AS build-env
 
-ENV NGINX_VERSION 1.12.2
+ENV NGINX_VERSION 1.14.2
 ENV PHP_VERSION 7.0.33
 ENV COMPOSER_VERSION 1.8.0
 
@@ -33,7 +33,6 @@ RUN tar -zxf nginx.tar.gz && rm -f nginx.tar.gz &&  \
     --http-log-path=/var/log/nginx/access.log \
     --pid-path=/var/run/nginx.pid \
     --with-pcre \
-    --with-http_ssl_module \
     --without-mail_pop3_module \
     --without-mail_imap_module \
     --without-mail_smtp_module \
