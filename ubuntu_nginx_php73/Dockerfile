@@ -37,7 +37,6 @@ RUN tar -zxf nginx.tar.gz && rm -f nginx.tar.gz && \
     --without-mail_smtp_module \
     --with-http_v2_module \
     --with-http_ssl_module \
-    --with-http_mirror_module \
     --with-http_gzip_static_module \
     --with-http_stub_status_module && \
     make -j4 > /dev/null && make install
