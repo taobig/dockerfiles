@@ -186,8 +186,7 @@ ADD conf/default_server.conf /etc/nginx/conf.d/default_server.conf
 ADD start.sh /start.sh
 RUN chmod +x /usr/local/bin/composer && \
     chmod 755 /start.sh && \
-    ln -sf /usr/share/zoneinfo/Asia/Shanghai  /etc/localtime && \
-    yum install -y cronie && yum clean all
+    ln -sf /usr/share/zoneinfo/Asia/Shanghai  /etc/localtime
 
 WORKDIR /app
 #VOLUME ["/usr/local/nginx/html", "/usr/local/nginx/conf/ssl", "/usr/local/nginx/conf/vhost", "/usr/local/php/etc/php.d"]
