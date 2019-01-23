@@ -189,7 +189,7 @@ ADD start.sh /start.sh
 RUN chmod +x /usr/local/bin/composer && chmod 755 /start.sh
 #RUN chmod 755 /start.sh
 # 有了apt-get install 后，从68 MB => 87 MB
-RUN apt-get update && apt-get install -y tzdata vim && apt-get clean && ln -sf /usr/share/zoneinfo/Asia/Shanghai  /etc/localtime && dpkg-reconfigure -f noninteractive tzdata
+RUN apt-get update && apt-get install -y tzdata vim cron && apt-get clean && ln -sf /usr/share/zoneinfo/Asia/Shanghai  /etc/localtime && dpkg-reconfigure -f noninteractive tzdata
 
 WORKDIR /app
 #VOLUME ["/usr/local/nginx/html", "/usr/local/nginx/conf/ssl", "/usr/local/nginx/conf/vhost", "/usr/local/php/etc/php.d"]
