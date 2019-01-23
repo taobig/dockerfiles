@@ -183,11 +183,11 @@ RUN useradd -m -s /sbin/nologin www && \
 ADD conf/nginx.conf /usr/local/nginx/conf/nginx.conf
 ADD conf/default_server.conf /etc/nginx/conf.d/default_server.conf
 
-RUN chmod +x /usr/local/bin/composer
 ADD start.sh /start.sh
-RUN chmod 755 /start.sh
-
-RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai  /etc/localtime
+RUN chmod +x /usr/local/bin/composer && \
+    chmod 755 /start.sh && \
+    ln -sf /usr/share/zoneinfo/Asia/Shanghai  /etc/localtime && \
+    yum install -y cronie && yum clean all
 
 WORKDIR /app
 #VOLUME ["/usr/local/nginx/html", "/usr/local/nginx/conf/ssl", "/usr/local/nginx/conf/vhost", "/usr/local/php/etc/php.d"]
