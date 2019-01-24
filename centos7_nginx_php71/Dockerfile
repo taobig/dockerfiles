@@ -128,45 +128,48 @@ COPY --from=build-env /usr/local/nginx /usr/local/nginx
 COPY --from=build-env /usr/local/php /usr/local/php
 COPY --from=build-env /usr/local/src/composer /usr/local/bin/composer
 
-COPY --from=build-env /lib64/libcrypt.so.1   /lib64/libcrypt.so.1
-COPY --from=build-env /lib64/libz.so.1   /lib64/libz.so.1
-COPY --from=build-env /lib64/libresolv.so.2   /lib64/libresolv.so.2
-COPY --from=build-env /lib64/librt.so.1   /lib64/librt.so.1
-COPY --from=build-env /lib64/libpng15.so.15   /lib64/libpng15.so.15
-COPY --from=build-env /lib64/libjpeg.so.62   /lib64/libjpeg.so.62
-COPY --from=build-env /lib64/libcurl.so.4   /lib64/libcurl.so.4
-COPY --from=build-env /lib64/libm.so.6   /lib64/libm.so.6
-COPY --from=build-env /lib64/libdl.so.2   /lib64/libdl.so.2
-COPY --from=build-env /lib64/libnsl.so.1   /lib64/libnsl.so.1
-COPY --from=build-env /lib64/libxml2.so.2   /lib64/libxml2.so.2
-COPY --from=build-env /lib64/libssl.so.10   /lib64/libssl.so.10
-COPY --from=build-env /lib64/libcrypto.so.10   /lib64/libcrypto.so.10
-COPY --from=build-env /lib64/libfreetype.so.6   /lib64/libfreetype.so.6
-COPY --from=build-env /lib64/libc.so.6   /lib64/libc.so.6
-COPY --from=build-env /lib64/libfreebl3.so   /lib64/libfreebl3.so
-COPY --from=build-env /lib64/libpthread.so.0   /lib64/libpthread.so.0
-COPY --from=build-env /lib64/libidn.so.11   /lib64/libidn.so.11
-COPY --from=build-env /lib64/libssh2.so.1   /lib64/libssh2.so.1
-COPY --from=build-env /lib64/libssl3.so   /lib64/libssl3.so
-COPY --from=build-env /lib64/libsmime3.so   /lib64/libsmime3.so
-COPY --from=build-env /lib64/libnss3.so   /lib64/libnss3.so
-COPY --from=build-env /lib64/libnssutil3.so   /lib64/libnssutil3.so
-COPY --from=build-env /lib64/libplds4.so   /lib64/libplds4.so
-COPY --from=build-env /lib64/libplc4.so   /lib64/libplc4.so
-COPY --from=build-env /lib64/libnspr4.so   /lib64/libnspr4.so
-COPY --from=build-env /lib64/libgssapi_krb5.so.2   /lib64/libgssapi_krb5.so.2
-COPY --from=build-env /lib64/libkrb5.so.3   /lib64/libkrb5.so.3
-COPY --from=build-env /lib64/libk5crypto.so.3   /lib64/libk5crypto.so.3
-COPY --from=build-env /lib64/libcom_err.so.2   /lib64/libcom_err.so.2
-COPY --from=build-env /lib64/liblber-2.4.so.2   /lib64/liblber-2.4.so.2
-COPY --from=build-env /lib64/libldap-2.4.so.2   /lib64/libldap-2.4.so.2
-COPY --from=build-env /lib64/ld-linux-x86-64.so.2   /lib64/ld-linux-x86-64.so.2
-COPY --from=build-env /lib64/liblzma.so.5   /lib64/liblzma.so.5
-COPY --from=build-env /lib64/libkrb5support.so.0   /lib64/libkrb5support.so.0
-COPY --from=build-env /lib64/libkeyutils.so.1   /lib64/libkeyutils.so.1
-COPY --from=build-env /lib64/libsasl2.so.3   /lib64/libsasl2.so.3
-COPY --from=build-env /lib64/libselinux.so.1   /lib64/libselinux.so.1
-COPY --from=build-env /lib64/libpcre.so.1   /lib64/libpcre.so.1
+COPY --from=build-env \
+    /lib64/libcrypt.so.1 \
+    /lib64/libz.so.1 \
+    /lib64/libresolv.so.2 \
+    /lib64/librt.so.1   \
+    /lib64/libpng15.so.15   \
+    /lib64/libjpeg.so.62   \
+    /lib64/libcurl.so.4   \
+    /lib64/libm.so.6   \
+    /lib64/libdl.so.2   \
+    /lib64/libnsl.so.1   \
+    /lib64/libxml2.so.2  \
+    /lib64/libssl.so.10   \
+    /lib64/libcrypto.so.10   \
+    /lib64/libfreetype.so.6  \
+    /lib64/libc.so.6   \
+    /lib64/libfreebl3.so  \
+    /lib64/libpthread.so.0  \
+    /lib64/libidn.so.11   \
+    /lib64/libssh2.so.1  \
+    /lib64/libssl3.so  \
+    /lib64/libsmime3.so \
+    /lib64/libnss3.so  \
+    /lib64/libnssutil3.so  \
+    /lib64/libplds4.so  \
+    /lib64/libplc4.so  \
+    /lib64/libnspr4.so  \
+    /lib64/libgssapi_krb5.so.2  \
+    /lib64/libkrb5.so.3  \
+    /lib64/libk5crypto.so.3  \
+    /lib64/libcom_err.so.2  \
+    /lib64/liblber-2.4.so.2  \
+    /lib64/libldap-2.4.so.2  \
+    /lib64/ld-linux-x86-64.so.2  \
+    /lib64/liblzma.so.5  \
+    /lib64/libkrb5support.so.0  \
+    /lib64/libkeyutils.so.1  \
+    /lib64/libsasl2.so.3  \
+    /lib64/libselinux.so.1 \
+    /lib64/libpcre.so.1  \
+    \
+    /lib64/
 
 
 RUN useradd -m -s /sbin/nologin www && \
