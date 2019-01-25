@@ -112,7 +112,7 @@ COPY --from=build-env /usr/local/nginx /usr/local/nginx
 COPY --from=build-env /usr/local/php /usr/local/php
 COPY --from=build-env /usr/local/src/composer /usr/local/bin/composer
 
-# COPY --from=build-env /lib64/libmcrypt.so.4  /lib64/libmcrypt.so.4  <=PHP7.0
+# COPY --from=build-env /lib64/libmcrypt.so.4  /lib64/libmcrypt.so.4  （<= PHP7.0）
 COPY --from=build-env \
     /lib64/libmcrypt.so.4 \
     /lib64/libcrypt.so.1 \
