@@ -120,7 +120,8 @@ RUN sed -i 's/^;date\.timezone[ ]*=[ ]*/date\.timezone = Asia\/Shanghai/' /usr/l
 #    sed -i 's/^;security\.limit_extensions .../default setting is safe/' /usr/local/php/etc/php-fpm.d/www.conf  && \
 
 
-RUN echo '' | /usr/local/php/bin/pecl install redis && \
+RUN /usr/local/php/bin/pecl install igbinary && echo "extension=igbinary.so" >> /usr/local/php/etc/php.ini && \
+    echo '' | /usr/local/php/bin/pecl install redis && \
     echo "extension=redis.so" >> /usr/local/php/etc/php.ini
 
 RUN rm -rf /usr/local/php/include
