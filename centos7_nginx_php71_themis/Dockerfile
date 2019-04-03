@@ -121,13 +121,27 @@ RUN sed -i 's/^;date\.timezone[ ]*=[ ]*/date\.timezone = Asia\/Shanghai/' /usr/l
 #    sed -i 's/^;cgi\.fix_pathinfo[ ]*=[ ]*1/cgi\.fix_pathinfo=0/' /usr/local/php/etc/php.ini
 #    sed -i 's/^;security\.limit_extensions .../default setting is safe/' /usr/local/php/etc/php-fpm.d/www.conf  && \
 
-
-RUN /usr/local/php/bin/pecl install igbinary && echo "extension=igbinary.so" >> /usr/local/php/etc/php.ini && \
-    echo '' | /usr/local/php/bin/pecl install redis && \
-    echo "extension=redis.so" >> /usr/local/php/etc/php.ini
-
-RUN rm -rf /usr/local/php/include
 RUN wget -c -O composer https://getcomposer.org/download/${COMPOSER_VERSION}/composer.phar
+
+#RUN /usr/local/php/bin/pecl install igbinary && echo "extension=igbinary.so" >> /usr/local/php/etc/php.ini && \
+#    echo '' | /usr/local/php/bin/pecl install redis && \
+#    echo "extension=redis.so" >> /usr/local/php/etc/php.ini && \
+#    rm -rf /usr/local/php/include
+
+RUN ln  -s  /usr/local/php/bin/php    /usr/local/bin/php && \
+    ln  -s  /usr/local/php/bin/phpize    /usr/local/bin/phpize && \
+    ln  -s  /usr/local/php/bin/pecl    /usr/local/bin/pecl && \
+    ln  -s  /usr/local/php/bin/php-config    /usr/local/bin/php-config && \
+    ln  -s  /usr/local/nginx/sbin/nginx    /usr/local/sbin/nginx
+
+ADD igbinary-3.0.1.tar.gz .
+RUN cd igbinary-3.0.1 && phpize &&  ./configure && make && make install && echo "extension=igbinary.so" >> /usr/local/php/etc/php.ini
+RUN php --ri igbinary
+
+ADD redis-4.3.0.tgz .
+RUN cd redis-4.3.0 && phpize &&  ./configure --enable-redis-igbinary && make && make install && echo "extension=redis.so" >> /usr/local/php/etc/php.ini
+RUN php --ri redis
+
 
 
 FROM centos:7.5.1804
