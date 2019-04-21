@@ -111,7 +111,13 @@ RUN sed -i 's/^;date\.timezone[ ]*=[ ]*/date\.timezone = Asia\/Shanghai/' /usr/l
     sed -i 's/^session\.cookie_httponly =$/session\.cookie_httponly = 1/' /usr/local/php/etc/php.ini && \
     sed -i 's/^memory_limit = 128M/memory_limit = 256M/' /usr/local/php/etc/php.ini && \
     sed -i 's/^expose_php = On/expose_php = Off/' /usr/local/php/etc/php.ini && \
-    sed -i 's/^upload_max_filesize = 2M/upload_max_filesize = 20M/' /usr/local/php/etc/php.ini
+    sed -i 's/^upload_max_filesize = 2M/upload_max_filesize = 20M/' /usr/local/php/etc/php.ini && \
+    sed -i 's/^pm.max_children = 5/pm.max_children = 20/' /usr/local/php/etc/php-fpm.d/www.conf  && \
+    sed -i 's/^pm.min_spare_servers = 1/pm.min_spare_servers = 3/' /usr/local/php/etc/php-fpm.d/www.conf  && \
+    sed -i 's/^pm.max_spare_servers = 3/pm.max_spare_servers = 7/' /usr/local/php/etc/php-fpm.d/www.conf  && \
+    sed -i 's/^pm.start_servers = 2/pm.start_servers = 5/' /usr/local/php/etc/php-fpm.d/www.conf
+
+# ; Default Value: min_spare_servers + (max_spare_servers - min_spare_servers) / 2
 
 # use default 127.0.0.1:9000
 #    sed -i 's/^listen = 127\.0\.0\.1:9000/listen = \/var\/run\/php-fpm\.sock/' /usr/local/php/etc/php-fpm.d/www.conf  && \
