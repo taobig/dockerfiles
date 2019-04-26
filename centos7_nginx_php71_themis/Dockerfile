@@ -106,7 +106,7 @@ RUN cd php-${PHP_VERSION} && make -j4 && make install && cd .. && \
 #    --enable-ftp \
 #   --without-pear    will remove pecl
 
-RUN sed -i 's/^;date\.timezone[ ]*=[ ]*/date\.timezone = Asia\/Shanghai/' /usr/local/php/etc/php.ini  && \
+RUN sed -i 's/^;date\.timezone[ ]*=[ ]*/date\.timezone = America\/Los_Angeles/' /usr/local/php/etc/php.ini  && \
     sed -i 's/^session\.use_strict_mode = 0/session\.use_strict_mode = 1/' /usr/local/php/etc/php.ini  && \
     sed -i 's/^session\.cookie_httponly =$/session\.cookie_httponly = 1/' /usr/local/php/etc/php.ini && \
     sed -i 's/^memory_limit = 128M/memory_limit = 256M/' /usr/local/php/etc/php.ini && \
@@ -148,6 +148,12 @@ ADD redis-4.3.0.tgz .
 RUN cd redis-4.3.0 && phpize &&  ./configure --enable-redis-igbinary && make && make install && echo "extension=redis.so" >> /usr/local/php/etc/php.ini
 RUN php --ri redis
 
+RUN yum install -y git
+# https://blog.csdn.net/qq_28602957/article/details/72697901
+RUN git clone https://github.com/longxinH/xhprof
+RUN cd xhprof/extension && phpize && ./configure && make && make install
+RUN echo "extension=xhprof.so" >> /usr/local/php/etc/php.ini && echo 'xhprof.output_dir = "/var/tmp/xhprof"' >> /usr/local/php/etc/php.ini
+#RUN mkdir -p /var/tmp/xhprof && chown -R www:www /var/tmp/xhprof
 
 
 FROM centos:7.5.1804
@@ -198,6 +204,7 @@ COPY --from=build-env \
     \
     /lib64/
 
+RUN yum install -y graphviz
 
 RUN useradd -m -s /sbin/nologin www && \
     mkdir /var/log/nginx && \
@@ -207,7 +214,8 @@ RUN useradd -m -s /sbin/nologin www && \
     ln  -s  /usr/local/php/bin/phpize    /usr/local/bin/phpize && \
     ln  -s  /usr/local/php/bin/pecl    /usr/local/bin/pecl && \
     ln  -s  /usr/local/php/bin/php-config    /usr/local/bin/php-config && \
-    ln  -s  /usr/local/nginx/sbin/nginx    /usr/local/sbin/nginx
+    ln  -s  /usr/local/nginx/sbin/nginx    /usr/local/sbin/nginx && \
+    mkdir -p /var/tmp/xhprof && chown -R www:www /var/tmp/xhprof
 
 #overwrite nginx.conf
 ADD conf/nginx.conf /usr/local/nginx/conf/nginx.conf
