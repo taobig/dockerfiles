@@ -204,8 +204,6 @@ COPY --from=build-env \
     \
     /lib64/
 
-RUN yum install -y graphviz
-
 RUN useradd -m -s /sbin/nologin www && \
     mkdir /var/log/nginx && \
     mkdir -p /etc/nginx/conf.d && \
