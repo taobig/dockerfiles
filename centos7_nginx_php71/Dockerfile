@@ -48,9 +48,13 @@ RUN wget -c -O php.tar.gz http://php.net/distributions/php-${PHP_VERSION}.tar.gz
 #RUN  whereis cmake
 #RUN  cmake -version
 #
-#ADD libzip-1.5.1.tar.gz .
-#RUN cd libzip-1.5.1 && mkdir build && cd build && cmake .. && make && make install
+#ADD libzip-1.5.2.tar.gz .
+#RUN wget -c https://libzip.org/download/libzip-1.5.2.tar.gz
+#RUN tar xzf libzip-1.5.2.tar.gz && cd libzip-1.5.2 && mkdir build && cd build && cmake .. && make && make install
 #RUN whereis libzip
+## fix "usr/local/include/zip.h:59:21: fatal error: zipconf.h: No such file or directory"
+#cp /usr/local/lib/libzip/include/zipconf.h /usr/local/include/zipconf.h
+
 
 RUN whereis bison
 ADD bison-3.2.1.tar.gz .
