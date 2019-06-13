@@ -42,7 +42,8 @@ RUN tar -zxf nginx.tar.gz && rm -f nginx.tar.gz && \
 #    --http-log-path=/var/log/nginx/access.log \
 #    --conf-path=/usr/local/nginx/nginx.conf \
 
-RUN wget -c -O php.tar.gz http://php.net/distributions/php-${PHP_VERSION}.tar.gz
+#RUN wget -c -O php.tar.gz http://php.net/distributions/php-${PHP_VERSION}.tar.gz
+RUN wget -c -O php.tar.gz https://downloads.php.net/~derick/php-7.4.0alpha1.tar.gz
 RUN tar zxf php.tar.gz && rm -f php.tar.gz && \
      cd php-${PHP_VERSION} && \
     ./configure --prefix=/usr/local/php \
