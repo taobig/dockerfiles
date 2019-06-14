@@ -12,6 +12,8 @@ RUN apt-get install -y wget
 # 16.04 libreadline6-dev
 # 18.04 libreadline-dev  add: libzip-dev
 RUN apt-get install -y build-essential autoconf make automake bison re2c libxml2-dev libssl-dev libfreetype6-dev libcurl4-gnutls-dev libjpeg-dev libpng-dev libreadline-dev  pkg-config libzip-dev
+# for PHP 7.4
+RUN apt install -y libsqlite3-dev libonig-dev
 
 #Add user  && download php and nginx source code
 #    groupadd -r www && \
