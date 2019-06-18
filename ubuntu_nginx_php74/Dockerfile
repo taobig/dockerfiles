@@ -56,14 +56,13 @@ RUN tar zxf php.tar.gz && rm -f php.tar.gz && \
     --with-mysqli \
     --with-pdo-mysql \
     --with-openssl \
-    --with-gd \
+    --enable-gd \
     --with-iconv \
     --with-zlib \
     --with-gettext \
     --with-curl \
-    --with-png-dir \
-    --with-jpeg-dir \
-    --with-freetype-dir \
+    --with-jpeg \
+    --with-freetype \
     --enable-fpm \
     --enable-xml \
     --enable-inline-optimization \
@@ -71,7 +70,7 @@ RUN tar zxf php.tar.gz && rm -f php.tar.gz && \
     --enable-mbstring \
     --enable-mysqlnd \
     --enable-sockets \
-    --enable-zip \
+    --with-zip \
     --enable-soap \
     --enable-bcmath \
     --enable-exif \
