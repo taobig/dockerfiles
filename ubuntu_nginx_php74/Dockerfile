@@ -4,11 +4,11 @@ ENV NGINX_VERSION 1.16.0
 ENV PHP_VERSION 7.4.0alpha1
 ENV COMPOSER_VERSION 1.8.6
 
-ARG DEBIAN_FRONTEND=noninteractive
+#ARG DEBIAN_FRONTEND=noninteractive
 #if not set WORKDIR, each RUN & CMD & ADD & COPY ... need to run `cd /usr/local/src`
 WORKDIR /usr/local/src
 
-RUN apt-get -yq update
+RUN DEBIAN_FRONTEND=noninteractive apt-get -yq update
 RUN apt-get install -y wget
 # 16.04 libreadline6-dev
 # 18.04 libreadline-dev  add: libzip-dev
