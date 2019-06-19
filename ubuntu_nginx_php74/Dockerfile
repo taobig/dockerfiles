@@ -173,6 +173,7 @@ COPY --from=build-env   \
     /usr/lib/x86_64-linux-gnu/libgssapi.so.3   \
     /usr/lib/x86_64-linux-gnu/libffi.so.6   \
     /usr/lib/x86_64-linux-gnu/libheimntlm.so.0   \
+    /usr/lib/x86_64-linux-gnu/libonig.so.4 \
     \
     /usr/lib/x86_64-linux-gnu/
 
