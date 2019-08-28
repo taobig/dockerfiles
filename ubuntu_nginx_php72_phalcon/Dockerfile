@@ -1,8 +1,8 @@
 FROM ubuntu:18.04 AS build-env
 
-ENV NGINX_VERSION 1.14.2
-ENV PHP_VERSION 7.2.12
-ENV COMPOSER_VERSION 1.8.4
+ENV NGINX_VERSION 1.16.1
+ENV PHP_VERSION 7.2.21
+ENV COMPOSER_VERSION 1.9.0
 
 #if not set WORKDIR, each RUN & CMD & ADD & COPY ... need to run `cd /usr/local/src`
 WORKDIR /usr/local/src
@@ -95,7 +95,7 @@ RUN sed -i 's/^;date\.timezone[ ]*=[ ]*/date\.timezone = Asia\/Shanghai/' /usr/l
     sed -i 's/^session\.cookie_httponly =$/session\.cookie_httponly = 1/' /usr/local/php/etc/php.ini && \
     sed -i 's/^memory_limit = 128M/memory_limit = 128M/' /usr/local/php/etc/php.ini && \
     sed -i 's/^expose_php = On/expose_php = Off/' /usr/local/php/etc/php.ini && \
-    sed -i 's/^upload_max_filesize = 2M/upload_max_filesize = 20M/' /usr/local/php/etc/php.ini && \
+    sed -i 's/^upload_max_filesize = 2M/upload_max_filesize = 100M/' /usr/local/php/etc/php.ini && \
     sed -i 's/^listen = 127\.0\.0\.1:9000/listen = \/var\/run\/php-fpm\.sock/' /usr/local/php/etc/php-fpm.d/www.conf  && \
     sed -i 's/^;listen.owner = www/listen.owner = www/' /usr/local/php/etc/php-fpm.d/www.conf  && \
     sed -i 's/^;listen.group = www/listen.group = www/' /usr/local/php/etc/php-fpm.d/www.conf  && \
