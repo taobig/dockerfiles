@@ -161,7 +161,8 @@ RUN echo "extension=protobuf.so" >> /usr/local/php/etc/php.ini
 
 ## xdebug
 RUN pecl install xdebug
-RUN echo "zend_extension=/usr/local/php/modules/xdebug.so" >> /usr/local/php/etc/php.ini
+#RUN echo "zend_extension=/usr/local/php/modules/xdebug.so" >> /usr/local/php/etc/php.ini
+RUN echo "zend_extension=xdebug.so" >> /usr/local/php/etc/php.ini
 
 
 FROM centos:7.5.1804
