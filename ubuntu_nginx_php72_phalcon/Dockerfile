@@ -111,7 +111,8 @@ RUN ln  -s  /usr/local/php/bin/php    /usr/local/bin/php && \
     ln  -s  /usr/local/php/bin/pecl    /usr/local/bin/pecl && \
     ln  -s  /usr/local/php/bin/php-config    /usr/local/bin/php-config
 RUN apt-get install -y git
-RUN git clone --depth=1  git://github.com/phalcon/cphalcon.git
+# compile version 3.4.x
+RUN git clone --depth=1 -b 3.4.x git://github.com/phalcon/cphalcon.git
 RUN cd cphalcon/build && ./install  /usr/local/php/bin/phpize --php-config /usr/local/php/bin/php-config
 RUN echo "extension=phalcon.so" >> /usr/local/php/etc/php.ini
 
