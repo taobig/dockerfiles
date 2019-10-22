@@ -116,6 +116,10 @@ RUN git clone --depth=1 -b 3.4.x git://github.com/phalcon/cphalcon.git
 RUN cd cphalcon/build && ./install  /usr/local/php/bin/phpize --php-config /usr/local/php/bin/php-config
 RUN echo "extension=phalcon.so" >> /usr/local/php/etc/php.ini
 
+ADD redis-4.3.0.tgz .
+RUN cd redis-4.3.0 && phpize &&  ./configure && make && make install && echo "extension=redis.so" >> /usr/local/php/etc/php.ini
+RUN php --ri redis
+
 # https://blog.csdn.net/qq_28602957/article/details/72697901
 RUN git clone https://github.com/longxinH/xhprof
 RUN cd xhprof/extension && phpize && ./configure && make && make install && echo "extension=xhprof.so" >> /usr/local/php/etc/php.ini
