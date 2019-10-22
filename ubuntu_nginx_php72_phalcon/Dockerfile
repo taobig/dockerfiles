@@ -1,7 +1,7 @@
 FROM ubuntu:18.04 AS build-env
 
 ENV NGINX_VERSION 1.16.1
-ENV PHP_VERSION 7.2.21
+ENV PHP_VERSION 7.2.23
 ENV COMPOSER_VERSION 1.9.0
 
 #if not set WORKDIR, each RUN & CMD & ADD & COPY ... need to run `cd /usr/local/src`
@@ -192,7 +192,7 @@ COPY --from=build-env   \
 RUN useradd -m -s /sbin/nologin www && \
     mkdir /var/log/nginx && \
     mkdir -p /etc/nginx/conf.d && \
-    mkdir -p /app/web && chown -R www:www /app && \
+    mkdir -p /app/public && chown -R www:www /app && \
     ln  -s  /usr/local/php/bin/php    /usr/local/bin/php && \
     ln  -s  /usr/local/php/bin/phpize    /usr/local/bin/phpize && \
     ln  -s  /usr/local/php/bin/pecl    /usr/local/bin/pecl && \
