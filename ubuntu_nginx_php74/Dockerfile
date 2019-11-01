@@ -1,7 +1,7 @@
 FROM ubuntu:18.04 AS build-env
 
 ENV NGINX_VERSION 1.16.1
-ENV PHP_VERSION 7.4.0RC4
+ENV PHP_VERSION 7.4.0RC5
 ENV COMPOSER_VERSION 1.9.0
 
 #if not set WORKDIR, each RUN & CMD & ADD & COPY ... need to run `cd /usr/local/src`
@@ -196,7 +196,7 @@ ADD conf/default_server.conf /etc/nginx/conf.d/default_server.conf
 ADD start.sh /start.sh
 
 RUN chmod +x /usr/local/bin/composer && chmod 755 /start.sh && \
-    apt-get update && apt-get install -y tzdata vim && apt-get clean && \
+    apt-get update && apt-get install -y tzdata ca-certificates vim && apt-get clean && \
     ln -sf /usr/share/zoneinfo/Asia/Shanghai  /etc/localtime && dpkg-reconfigure -f noninteractive tzdata
 
 WORKDIR /app
