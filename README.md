@@ -22,6 +22,7 @@ php.ini settings:
 1. session.cookie_httponly = 1
 1. memory_limit = 128M
 1. expose_php = Off
+1. upload_max_filesize = 100M
 
 
 # build manually
