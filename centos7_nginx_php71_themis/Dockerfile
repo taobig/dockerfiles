@@ -155,7 +155,7 @@ RUN cd xhprof/extension && phpize && ./configure && make && make install
 RUN echo "extension=xhprof.so" >> /usr/local/php/etc/php.ini && echo 'xhprof.output_dir = "/var/tmp/xhprof"' >> /usr/local/php/etc/php.ini
 #RUN mkdir -p /var/tmp/xhprof && chown -R www:www /var/tmp/xhprof
 
-RUN  pecl install grpc protobuf
+RUN  pecl install grpc-1.22.0 protobuf-3.8.0
 RUN echo "extension=grpc.so" >> /usr/local/php/etc/php.ini
 RUN echo "extension=protobuf.so" >> /usr/local/php/etc/php.ini
 
