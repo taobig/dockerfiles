@@ -196,8 +196,9 @@ ADD conf/nginx.conf /usr/local/nginx/conf/nginx.conf
 ADD conf/default_server.conf /etc/nginx/conf.d/default_server.conf
 ADD start.sh /start.sh
 
+# /var/lib/apt/lists is huge
 RUN chmod +x /usr/local/bin/composer && chmod 755 /start.sh && \
-    apt-get update && apt-get install -y tzdata ca-certificates iputils-ping vim && apt-get clean && \
+    apt-get update && apt-get install -y tzdata ca-certificates iputils-ping vim && apt-get clean && rm -rf /var/lib/apt/lists/* && \
     ln -sf /usr/share/zoneinfo/Asia/Shanghai  /etc/localtime && dpkg-reconfigure -f noninteractive tzdata
 
 WORKDIR /app
