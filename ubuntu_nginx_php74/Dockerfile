@@ -179,12 +179,18 @@ COPY --from=build-env   \
     /usr/lib/x86_64-linux-gnu/libffi.so.6   \
     /usr/lib/x86_64-linux-gnu/libheimntlm.so.0   \
     /usr/lib/x86_64-linux-gnu/libonig.so.4 \
+    /usr/lib/x86_64-linux-gnu/libzip.so.4 \
     \
     /usr/lib/x86_64-linux-gnu/
-
 # 18.04 add:
-COPY --from=build-env  /usr/lib/x86_64-linux-gnu/libzip.so.4    /usr/lib/x86_64-linux-gnu/
+# COPY --from=build-env  /usr/lib/x86_64-linux-gnu/libzip.so.4    /usr/lib/x86_64-linux-gnu/
 
+#overwrite nginx.conf
+ADD conf/nginx.conf /usr/local/nginx/conf/nginx.conf
+ADD conf/default_server.conf /etc/nginx/conf.d/default_server.conf
+ADD start.sh /start.sh
+
+# /var/lib/apt/lists is huge
 RUN useradd -m -s /sbin/nologin www && \
     mkdir /var/log/nginx && \
     mkdir -p /etc/nginx/conf.d && \
@@ -193,15 +199,8 @@ RUN useradd -m -s /sbin/nologin www && \
     ln  -s  /usr/local/php/bin/phpize    /usr/local/bin/phpize && \
     ln  -s  /usr/local/php/bin/pecl    /usr/local/bin/pecl && \
     ln  -s  /usr/local/php/bin/php-config    /usr/local/bin/php-config && \
-    ln  -s  /usr/local/nginx/sbin/nginx    /usr/local/sbin/nginx
-
-#overwrite nginx.conf
-ADD conf/nginx.conf /usr/local/nginx/conf/nginx.conf
-ADD conf/default_server.conf /etc/nginx/conf.d/default_server.conf
-ADD start.sh /start.sh
-
-# /var/lib/apt/lists is huge
-RUN chmod +x /usr/local/bin/composer && chmod 755 /start.sh && \
+    ln  -s  /usr/local/nginx/sbin/nginx    /usr/local/sbin/nginx && \
+    chmod +x /usr/local/bin/composer && chmod 755 /start.sh && \
     apt-get update && apt-get install -y tzdata ca-certificates iputils-ping vim && apt-get clean && rm -rf /var/lib/apt/lists/* && \
     ln -sf /usr/share/zoneinfo/Asia/Shanghai  /etc/localtime && dpkg-reconfigure -f noninteractive tzdata
 
