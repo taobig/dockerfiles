@@ -1,8 +1,11 @@
 FROM ubuntu:18.04 AS build-env
 
+#http://nginx.org/en/download.html
 ENV NGINX_VERSION 1.16.1
-ENV PHP_VERSION 7.3.9
-ENV COMPOSER_VERSION 1.9.0
+#https://www.php.net/
+ENV PHP_VERSION 7.3.17
+#https://getcomposer.org/
+ENV COMPOSER_VERSION 1.10.5
 
 #if not set WORKDIR, each RUN & CMD & ADD & COPY ... need to run `cd /usr/local/src`
 WORKDIR /usr/local/src
@@ -192,8 +195,9 @@ ADD conf/nginx.conf /usr/local/nginx/conf/nginx.conf
 ADD conf/default_server.conf /etc/nginx/conf.d/default_server.conf
 ADD start.sh /start.sh
 
+# /var/lib/apt/lists is huge
 RUN chmod +x /usr/local/bin/composer && chmod 755 /start.sh && \
-    apt-get update && apt-get install -y tzdata ca-certificates vim && apt-get clean && \
+    apt-get update && apt-get install -y tzdata ca-certificates vim && apt-get clean && rm -rf /var/lib/apt/lists/* && \
     ln -sf /usr/share/zoneinfo/Asia/Shanghai  /etc/localtime && dpkg-reconfigure -f noninteractive tzdata
 
 WORKDIR /app
