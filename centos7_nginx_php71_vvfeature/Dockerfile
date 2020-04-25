@@ -111,6 +111,10 @@ RUN sed -i 's/^;date\.timezone[ ]*=[ ]*/date\.timezone = America\/Los_Angeles/' 
     sed -i 's/^memory_limit = 128M/memory_limit = 128M/' /usr/local/php/etc/php.ini && \
     sed -i 's/^expose_php = On/expose_php = Off/' /usr/local/php/etc/php.ini && \
     sed -i 's/^upload_max_filesize = 2M/upload_max_filesize = 100M/' /usr/local/php/etc/php.ini && \
+    sed -i 's/^listen = 127\.0\.0\.1:9000/listen = \/var\/run\/php-fpm\.sock/' /usr/local/php/etc/php-fpm.d/www.conf  && \
+    sed -i 's/^;listen.owner = www/listen.owner = www/' /usr/local/php/etc/php-fpm.d/www.conf  && \
+    sed -i 's/^;listen.group = www/listen.group = www/' /usr/local/php/etc/php-fpm.d/www.conf  && \
+    sed -i 's/^;listen.mode = 0660/listen.mode = 0660/' /usr/local/php/etc/php-fpm.d/www.conf  && \
     sed -i 's/^pm.max_children = 5/pm.max_children = 20/' /usr/local/php/etc/php-fpm.d/www.conf  && \
     sed -i 's/^pm.min_spare_servers = 1/pm.min_spare_servers = 3/' /usr/local/php/etc/php-fpm.d/www.conf  && \
     sed -i 's/^pm.max_spare_servers = 3/pm.max_spare_servers = 7/' /usr/local/php/etc/php-fpm.d/www.conf  && \
