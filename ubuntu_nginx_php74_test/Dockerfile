@@ -1,11 +1,9 @@
-FROM ubuntu:18.04 AS build-env
+FROM ubuntu:20.04 AS build-env
 
 #http://nginx.org/en/download.html
 ENV NGINX_VERSION 1.18.0
 #https://www.php.net/
 ENV PHP_VERSION 7.4.5
-#https://getcomposer.org/
-ENV COMPOSER_VERSION 1.10.6
 
 #if not set WORKDIR, each RUN & CMD & ADD & COPY ... need to run `cd /usr/local/src`
 WORKDIR /usr/local/src
@@ -115,13 +113,11 @@ RUN sed -i 's/^;date\.timezone[ ]*=[ ]*/date\.timezone = Asia\/Shanghai/' /usr/l
 
 # phpize need `/usr/local/php/include`
 RUN rm -rf /usr/local/php/include
-RUN wget -c -O composer https://getcomposer.org/download/${COMPOSER_VERSION}/composer.phar
 
 
-FROM ubuntu:18.04
+FROM ubuntu:20.04
 COPY --from=build-env /usr/local/nginx /usr/local/nginx
 COPY --from=build-env /usr/local/php /usr/local/php
-COPY --from=build-env /usr/local/src/composer /usr/local/bin/composer
 
 COPY --from=build-env   \
     /lib/x86_64-linux-gnu/liblzma.so.5 \
@@ -200,7 +196,7 @@ RUN useradd -m -s /sbin/nologin www && \
     ln  -s  /usr/local/php/bin/pecl    /usr/local/bin/pecl && \
     ln  -s  /usr/local/php/bin/php-config    /usr/local/bin/php-config && \
     ln  -s  /usr/local/nginx/sbin/nginx    /usr/local/sbin/nginx && \
-    chmod +x /usr/local/bin/composer && chmod 755 /start.sh && \
+    chmod 755 /start.sh && \
     apt-get update && apt-get install -y tzdata ca-certificates iputils-ping vim && apt-get clean && rm -rf /var/lib/apt/lists/* && \
     ln -sf /usr/share/zoneinfo/Asia/Shanghai  /etc/localtime && dpkg-reconfigure -f noninteractive tzdata
 
