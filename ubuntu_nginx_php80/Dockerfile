@@ -4,12 +4,11 @@ FROM ubuntu:20.04 AS build-env
 ENV NGINX_VERSION 1.18.0
 #https://www.php.net/
 ENV PHP_VERSION 8.0.0
-#https://getcomposer.org/
-ENV COMPOSER_VERSION 1.10.6
 
 #if not set WORKDIR, each RUN & CMD & ADD & COPY ... need to run `cd /usr/local/src`
 WORKDIR /usr/local/src
 
+ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get -y update
 RUN apt-get install -y wget
 # 16.04 libreadline6-dev
@@ -17,6 +16,8 @@ RUN apt-get install -y wget
 RUN apt-get install -y build-essential autoconf make automake bison re2c libxml2-dev libssl-dev libfreetype6-dev libcurl4-gnutls-dev libjpeg-dev libpng-dev libreadline-dev  pkg-config libzip-dev
 # for PHP 7.4
 RUN apt-get install -y libsqlite3-dev libonig-dev
+# 20.04 add: libpcre3-dev
+RUN apt-get install -y libpcre3-dev
 
 #Add user  && download php and nginx source code
 #    groupadd -r www && \
@@ -47,10 +48,13 @@ RUN tar -zxf nginx.tar.gz && rm -f nginx.tar.gz && \
 #    --http-log-path=/var/log/nginx/access.log \
 #    --conf-path=/usr/local/nginx/nginx.conf \
 
-RUN apt-get install -y git && git clone git@github.com:php/php-src.git php-${PHP_VERSION}
+RUN apt-get install -y git
+#RUN ssh-keyscan -H github.com >> ~/.ssh/known_hosts && git clone git@github.com:php/php-src.git php-${PHP_VERSION}
+RUN git clone https://github.com/php/php-src.git php-${PHP_VERSION}
 #RUN wget -c -O php.tar.gz http://php.net/distributions/php-${PHP_VERSION}.tar.gz
 #RUN tar zxf php.tar.gz && rm -f php.tar.gz && \
 RUN     cd php-${PHP_VERSION} && \
+    ./buildconf && \
     ./configure --prefix=/usr/local/php \
     --with-config-file-path=/usr/local/php/etc \
     --with-config-file-scan-dir=/usr/local/php/etc/php.d \
@@ -96,8 +100,7 @@ RUN cp ./php-${PHP_VERSION}/php.ini-production /usr/local/php/etc/php.ini && \
     strip /usr/local/php/bin/php && \
     strip /usr/local/php/sbin/php-fpm && \
     strip /usr/local/nginx/sbin/nginx && \
-    strip /usr/local/php/lib/php/extensions/no-debug-non-zts-20190902/opcache.a && \
-    strip /usr/local/php/lib/php/extensions/no-debug-non-zts-20190902/opcache.so
+    strip /usr/local/php/lib/php/extensions/no-debug-non-zts-20190128/opcache.so
 
 RUN sed -i 's/^;date\.timezone[ ]*=[ ]*/date\.timezone = Asia\/Shanghai/' /usr/local/php/etc/php.ini  && \
     sed -i 's/^session\.use_strict_mode = 0/session\.use_strict_mode = 1/' /usr/local/php/etc/php.ini  && \
@@ -116,13 +119,11 @@ RUN sed -i 's/^;date\.timezone[ ]*=[ ]*/date\.timezone = Asia\/Shanghai/' /usr/l
 
 # phpize need `/usr/local/php/include`
 RUN rm -rf /usr/local/php/include
-RUN wget -c -O composer https://getcomposer.org/download/${COMPOSER_VERSION}/composer.phar
 
 
 FROM ubuntu:20.04
 COPY --from=build-env /usr/local/nginx /usr/local/nginx
 COPY --from=build-env /usr/local/php /usr/local/php
-COPY --from=build-env /usr/local/src/composer /usr/local/bin/composer
 
 COPY --from=build-env   \
     /lib/x86_64-linux-gnu/liblzma.so.5 \
@@ -136,55 +137,52 @@ COPY --from=build-env   \
     /lib/x86_64-linux-gnu/libpthread.so.0 \
     /lib/x86_64-linux-gnu/libresolv.so.2 \
     /lib/x86_64-linux-gnu/libz.so.1 \
+    /lib/x86_64-linux-gnu/libhogweed.so.5 \
+    lib/x86_64-linux-gnu/libnettle.so.7 \
+    /lib/x86_64-linux-gnu/libicuuc.so.66 \
+    /lib/x86_64-linux-gnu/libicudata.so.66   \
+    /lib/x86_64-linux-gnu/libffi.so.7   \
+    /lib/x86_64-linux-gnu/libonig.so.5 \
+    /lib/x86_64-linux-gnu/libzip.so.5 \
+    /lib/x86_64-linux-gnu/libhx509.so.5  \
+    /lib/x86_64-linux-gnu/libsqlite3.so.0  \
+    /lib/x86_64-linux-gnu/libjpeg.so.8   \
+    /lib/x86_64-linux-gnu/libpng16.so.16   \
+    /lib/x86_64-linux-gnu/libcurl-gnutls.so.4   \
+    /lib/x86_64-linux-gnu/libssl.so.1.1   \
+    /lib/x86_64-linux-gnu/libasn1.so.8   \
+    /lib/x86_64-linux-gnu/libcrypto.so.1.1   \
+    /lib/x86_64-linux-gnu/libgnutls.so.30   \
+    /lib/x86_64-linux-gnu/libhcrypto.so.4   \
+    /lib/x86_64-linux-gnu/libheimbase.so.1   \
+    /lib/x86_64-linux-gnu/libidn2.so.0   \
+    /lib/x86_64-linux-gnu/libk5crypto.so.3   \
+    /lib/x86_64-linux-gnu/liblber-2.4.so.2   \
+    /lib/x86_64-linux-gnu/libroken.so.18   \
+    /lib/x86_64-linux-gnu/libstdc++.so.6   \
+    /lib/x86_64-linux-gnu/libwind.so.0   \
+    /lib/x86_64-linux-gnu/libxml2.so.2   \
+    /lib/x86_64-linux-gnu/libfreetype.so.6  \
+    /lib/x86_64-linux-gnu/libnghttp2.so.14  \
+    /lib/x86_64-linux-gnu/librtmp.so.1   \
+    /lib/x86_64-linux-gnu/libpsl.so.5   \
+    /lib/x86_64-linux-gnu/libgssapi_krb5.so.2   \
+    /lib/x86_64-linux-gnu/libldap_r-2.4.so.2   \
+    /lib/x86_64-linux-gnu/libunistring.so.2   \
+    /lib/x86_64-linux-gnu/libgmp.so.10   \
+    /lib/x86_64-linux-gnu/libp11-kit.so.0   \
+    /lib/x86_64-linux-gnu/libtasn1.so.6   \
+    /lib/x86_64-linux-gnu/libkrb5.so.26   \
+    /lib/x86_64-linux-gnu/libkrb5support.so.0   \
+    /lib/x86_64-linux-gnu/libkrb5.so.3   \
+    /lib/x86_64-linux-gnu/libsasl2.so.2   \
+    /lib/x86_64-linux-gnu/libgssapi.so.3   \
+    /lib/x86_64-linux-gnu/libheimntlm.so.0   \
+    /lib/x86_64-linux-gnu/libssh.so.4 \
+    /lib/x86_64-linux-gnu/libbrotlidec.so.1 \
+    /lib/x86_64-linux-gnu/libbrotlicommon.so.1 \
     \
     /lib/x86_64-linux-gnu/
-
-COPY --from=build-env   \
-    /usr/lib/x86_64-linux-gnu/libhx509.so.5  \
-    /usr/lib/x86_64-linux-gnu/libsqlite3.so.0  \
-    /usr/lib/x86_64-linux-gnu/libjpeg.so.8   \
-    /usr/lib/x86_64-linux-gnu/libpng16.so.16   \
-    /usr/lib/x86_64-linux-gnu/libcurl-gnutls.so.4   \
-    /usr/lib/x86_64-linux-gnu/libssl.so.1.1   \
-    /usr/lib/x86_64-linux-gnu/libasn1.so.8   \
-    /usr/lib/x86_64-linux-gnu/libcrypto.so.1.1   \
-    /usr/lib/x86_64-linux-gnu/libgnutls.so.30   \
-    /usr/lib/x86_64-linux-gnu/libhcrypto.so.4   \
-    /usr/lib/x86_64-linux-gnu/libheimbase.so.1   \
-    /usr/lib/x86_64-linux-gnu/libhogweed.so.4   \
-    /usr/lib/x86_64-linux-gnu/libidn2.so.0   \
-    /usr/lib/x86_64-linux-gnu/libk5crypto.so.3   \
-    /usr/lib/x86_64-linux-gnu/liblber-2.4.so.2   \
-    /usr/lib/x86_64-linux-gnu/libnettle.so.6   \
-    /usr/lib/x86_64-linux-gnu/libroken.so.18   \
-    /usr/lib/x86_64-linux-gnu/libstdc++.so.6   \
-    /usr/lib/x86_64-linux-gnu/libwind.so.0   \
-    /usr/lib/x86_64-linux-gnu/libxml2.so.2   \
-    /usr/lib/x86_64-linux-gnu/libfreetype.so.6  \
-    /usr/lib/x86_64-linux-gnu/libicuuc.so.60  \
-    /usr/lib/x86_64-linux-gnu/libnghttp2.so.14  \
-    /usr/lib/x86_64-linux-gnu/librtmp.so.1   \
-    /usr/lib/x86_64-linux-gnu/libpsl.so.5   \
-    /usr/lib/x86_64-linux-gnu/libgssapi_krb5.so.2   \
-    /usr/lib/x86_64-linux-gnu/libldap_r-2.4.so.2   \
-    /usr/lib/x86_64-linux-gnu/libicudata.so.60   \
-    /usr/lib/x86_64-linux-gnu/libunistring.so.2   \
-    /usr/lib/x86_64-linux-gnu/libgmp.so.10   \
-    /usr/lib/x86_64-linux-gnu/libp11-kit.so.0   \
-    /usr/lib/x86_64-linux-gnu/libtasn1.so.6   \
-    /usr/lib/x86_64-linux-gnu/libkrb5.so.26   \
-    /usr/lib/x86_64-linux-gnu/libkrb5support.so.0   \
-    /usr/lib/x86_64-linux-gnu/libkrb5.so.3   \
-    /usr/lib/x86_64-linux-gnu/libsasl2.so.2   \
-    /usr/lib/x86_64-linux-gnu/libgssapi.so.3   \
-    /usr/lib/x86_64-linux-gnu/libffi.so.6   \
-    /usr/lib/x86_64-linux-gnu/libheimntlm.so.0   \
-    /usr/lib/x86_64-linux-gnu/libonig.so.4 \
-    /usr/lib/x86_64-linux-gnu/libzip.so.4 \
-    \
-    /usr/lib/x86_64-linux-gnu/
-# 18.04 add:
-# COPY --from=build-env  /usr/lib/x86_64-linux-gnu/libzip.so.4    /usr/lib/x86_64-linux-gnu/
 
 #overwrite nginx.conf
 ADD conf/nginx.conf /usr/local/nginx/conf/nginx.conf
@@ -201,7 +199,7 @@ RUN useradd -m -s /sbin/nologin www && \
     ln  -s  /usr/local/php/bin/pecl    /usr/local/bin/pecl && \
     ln  -s  /usr/local/php/bin/php-config    /usr/local/bin/php-config && \
     ln  -s  /usr/local/nginx/sbin/nginx    /usr/local/sbin/nginx && \
-    chmod +x /usr/local/bin/composer && chmod 755 /start.sh && \
+    chmod 755 /start.sh && \
     apt-get update && apt-get install -y tzdata ca-certificates iputils-ping vim && apt-get clean && rm -rf /var/lib/apt/lists/* && \
     ln -sf /usr/share/zoneinfo/Asia/Shanghai  /etc/localtime && dpkg-reconfigure -f noninteractive tzdata
 

@@ -29,3 +29,6 @@ php.ini settings:
 # build manually
 cd {dir}
 docker build -t taobig/php7x .
+docker run --rm --name php7 -d taobig/php7x
+
+
