@@ -199,9 +199,7 @@ RUN useradd -m -s /sbin/nologin www && \
     ln  -s  /usr/local/php/bin/pecl    /usr/local/bin/pecl && \
     ln  -s  /usr/local/php/bin/php-config    /usr/local/bin/php-config && \
     ln  -s  /usr/local/nginx/sbin/nginx    /usr/local/sbin/nginx && \
-    chmod 755 /start.sh && \
-    apt-get update && apt-get install -y tzdata ca-certificates iputils-ping vim && apt-get clean && rm -rf /var/lib/apt/lists/* && \
-    ln -sf /usr/share/zoneinfo/Asia/Shanghai  /etc/localtime && dpkg-reconfigure -f noninteractive tzdata
+    chmod 755 /start.sh
 
 WORKDIR /app
 #VOLUME ["/usr/local/nginx/html", "/usr/local/nginx/conf/ssl", "/usr/local/nginx/conf/vhost", "/usr/local/php/etc/php.d"]
