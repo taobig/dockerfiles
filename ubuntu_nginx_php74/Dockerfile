@@ -201,8 +201,9 @@ RUN useradd -m -s /sbin/nologin www && \
     ln  -s  /usr/local/php/bin/php-config    /usr/local/bin/php-config && \
     ln  -s  /usr/local/nginx/sbin/nginx    /usr/local/sbin/nginx && \
     chmod +x /usr/local/bin/composer && chmod 755 /start.sh && \
-    apt-get update && apt-get install -y tzdata ca-certificates iputils-ping vim zip git && apt-get clean && rm -rf /var/lib/apt/lists/* && \
+    apt-get update && apt-get install -y ca-certificates iputils-ping vim zip git && apt-get clean && rm -rf /var/lib/apt/lists/* && \
     ln -sf /usr/share/zoneinfo/Asia/Shanghai  /etc/localtime && dpkg-reconfigure -f noninteractive tzdata
+# TODO: 暂时移除tzdata,因为安装时需要人工选择区域
 
 WORKDIR /app
 #VOLUME ["/usr/local/nginx/html", "/usr/local/nginx/conf/ssl", "/usr/local/nginx/conf/vhost", "/usr/local/php/etc/php.d"]
