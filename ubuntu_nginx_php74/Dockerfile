@@ -202,7 +202,7 @@ RUN useradd -m -s /sbin/nologin www && \
     ln  -s  /usr/local/nginx/sbin/nginx    /usr/local/sbin/nginx && \
     chmod +x /usr/local/bin/composer && chmod 755 /start.sh && \
     ln -sf /usr/share/zoneinfo/Asia/Shanghai  /etc/localtime && \
-    apt-get update && apt-get install -y tzdata ca-certificates iputils-ping vim zip git && apt-get clean && rm -rf /var/lib/apt/lists/*
+    apt-get update && apt-get install -y tzdata ca-certificates && apt-get clean && rm -rf /var/lib/apt/lists/*
 # 先建软链，再安装tzdata 就不需要dpkg-reconfigure -f noninteractive tzdata
 
 WORKDIR /app
