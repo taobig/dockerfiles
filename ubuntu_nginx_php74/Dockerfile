@@ -203,7 +203,7 @@ RUN useradd -m -s /sbin/nologin www && \
     chmod +x /usr/local/bin/composer && chmod 755 /start.sh && \
     ln -sf /usr/share/zoneinfo/Asia/Shanghai  /etc/localtime && \
     apt-get update && apt-get install -y tzdata ca-certificates && apt-get clean && rm -rf /var/lib/apt/lists/*
-# 先建软链，再安装tzdata 就不需要dpkg-reconfigure -f noninteractive tzdata
+# 先建软链，再安装tzdata 就不需要dpkg-reconfigure -f noninteractive tzdata； 或者参考：https://serverfault.com/questions/949991/how-to-install-tzdata-on-a-ubuntu-docker-image
 
 WORKDIR /app
 #VOLUME ["/usr/local/nginx/html", "/usr/local/nginx/conf/ssl", "/usr/local/nginx/conf/vhost", "/usr/local/php/etc/php.d"]
