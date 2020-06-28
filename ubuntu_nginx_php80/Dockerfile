@@ -138,7 +138,7 @@ COPY --from=build-env   \
     /lib/x86_64-linux-gnu/libresolv.so.2 \
     /lib/x86_64-linux-gnu/libz.so.1 \
     /lib/x86_64-linux-gnu/libhogweed.so.5 \
-    lib/x86_64-linux-gnu/libnettle.so.7 \
+    /lib/x86_64-linux-gnu/libnettle.so.7 \
     /lib/x86_64-linux-gnu/libicuuc.so.66 \
     /lib/x86_64-linux-gnu/libicudata.so.66   \
     /lib/x86_64-linux-gnu/libffi.so.7   \
