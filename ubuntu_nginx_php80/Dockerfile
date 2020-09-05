@@ -100,7 +100,7 @@ RUN cp ./php-${PHP_VERSION}/php.ini-production /usr/local/php/etc/php.ini && \
     strip /usr/local/php/bin/php && \
     strip /usr/local/php/sbin/php-fpm && \
     strip /usr/local/nginx/sbin/nginx && \
-    strip /usr/local/php/lib/php/extensions/no-debug-non-zts-20190128/opcache.so
+    strip /usr/local/php/lib/php/extensions/no-debug-non-zts-20200804/opcache.so
 
 RUN sed -i 's/^;date\.timezone[ ]*=[ ]*/date\.timezone = Asia\/Shanghai/' /usr/local/php/etc/php.ini  && \
     sed -i 's/^session\.use_strict_mode = 0/session\.use_strict_mode = 1/' /usr/local/php/etc/php.ini  && \
