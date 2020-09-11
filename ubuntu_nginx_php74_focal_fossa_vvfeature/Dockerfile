@@ -73,6 +73,7 @@ RUN tar zxf php.tar.gz && rm -f php.tar.gz && \
     --enable-pcntl \
     --disable-cgi \
     --disable-phpdbg \
+    --with-pear \
     && \
     make -j4 > /dev/null && make install;
 #    --with-xmlrpc \  This extension is EXPERIMENTAL.
@@ -105,32 +106,47 @@ RUN sed -i 's/^;date\.timezone[ ]*=[ ]*/date\.timezone = America\/Los_Angeles/' 
 #    sed -i 's/^;cgi\.fix_pathinfo[ ]*=[ ]*1/cgi\.fix_pathinfo=0/' /usr/local/php/etc/php.ini
 #    sed -i 's/^;security\.limit_extensions .../default setting is safe/' /usr/local/php/etc/php-fpm.d/www.conf  && \
 
-
-
 ADD redis-4.3.0.tgz .
-RUN cd redis-4.3.0 && phpize &&  ./configure && make && make install && echo "extension=redis.so" >> /usr/local/php/etc/php.ini
-RUN php --ri redis
+RUN cd redis-4.3.0 && /usr/local/php/bin/phpize &&  ./configure --with-php-config=/usr/local/php/bin/php-config && make && make install && echo "extension=redis.so" >> /usr/local/php/etc/php.ini
+RUN /usr/local/php/bin/php --ri redis
 
-RUN yum install -y git
-# https://blog.csdn.net/qq_28602957/article/details/72697901
-RUN git clone https://github.com/longxinH/xhprof
-RUN cd xhprof/extension && phpize && ./configure && make && make install
-RUN echo "extension=xhprof.so" >> /usr/local/php/etc/php.ini && echo 'xhprof.output_dir = "/var/tmp/xhprof"' >> /usr/local/php/etc/php.ini
-#RUN mkdir -p /var/tmp/xhprof && chown -R www:www /var/tmp/xhprof
+RUN apt-get install -y git
 
-# compile version 3.4.x
-RUN git clone --depth=1 -b 3.4.x git://github.com/phalcon/cphalcon.git
-RUN cd cphalcon/build && ./install  /usr/local/php/bin/phpize --php-config /usr/local/php/bin/php-config
-RUN echo "extension=phalcon.so" >> /usr/local/php/etc/php.ini
+## https://blog.csdn.net/qq_28602957/article/details/72697901
+#RUN git clone https://github.com/longxinH/xhprof
+#RUN cd xhprof/extension && /usr/local/php/bin/phpize && ./configure --with-php-config=/usr/local/php/bin/php-config && make && make install
+#RUN echo "extension=xhprof.so" >> /usr/local/php/etc/php.ini && echo 'xhprof.output_dir = "/var/tmp/xhprof"' >> /usr/local/php/etc/php.ini
+#RUN /usr/local/php/bin/php --ri xhprof
+##RUN mkdir -p /var/tmp/xhprof && chown -R www:www /var/tmp/xhprof
 
-RUN  pecl install grpc-1.22.0 protobuf-3.8.0
+# grpc-1.31.0 protobuf-3.11.2 ok(2020-09-11)
+# latest version: grpc-1.31.1 protobuf-3.13.0 ok(2020-09-11)??
+#RUN /usr/local/php/bin/pecl install grpc-1.22.0 protobuf-3.8.0 与PHP7.4不兼容
+RUN /usr/local/php/bin/pecl install grpc-1.31.1 protobuf-3.13.0
 RUN echo "extension=grpc.so" >> /usr/local/php/etc/php.ini
 RUN echo "extension=protobuf.so" >> /usr/local/php/etc/php.ini
+RUN /usr/local/php/bin/php --ri grpc
+RUN /usr/local/php/bin/php --ri protobuf
 
-## xdebug
-RUN pecl install xdebug
+RUN /usr/local/php/bin/pecl install xdebug
 #RUN echo "zend_extension=/usr/local/php/modules/xdebug.so" >> /usr/local/php/etc/php.ini
 RUN echo "zend_extension=xdebug.so" >> /usr/local/php/etc/php.ini
+RUN /usr/local/php/bin/php --ri xdebug
+
+RUN /usr/local/php/bin/pecl install phalcon-4.0.6
+#RUN ln  -s  /usr/local/php/bin/php    /usr/local/bin/php && \
+#    ln  -s  /usr/local/php/bin/phpize    /usr/local/bin/phpize && \
+#    ln  -s  /usr/local/php/bin/pecl    /usr/local/bin/pecl && \
+#    ln  -s  /usr/local/php/bin/php-config    /usr/local/bin/php-config && \
+#    ln  -s  /usr/local/nginx/sbin/nginx    /usr/local/sbin/nginx
+## compile version 3.4.x 依赖环境变量
+#RUN git clone --depth=1 -b 4.x git://github.com/phalcon/cphalcon.git
+#RUN cd cphalcon/build && ./install
+RUN echo "extension=phalcon.so" >> /usr/local/php/etc/php.ini
+RUN echo "extension=psr.so" >> /usr/local/php/etc/php.ini
+RUN /usr/local/php/bin/php --ri phalcon
+
+
 FROM ubuntu:20.04
 COPY --from=build-env /usr/local/nginx /usr/local/nginx
 COPY --from=build-env /usr/local/php /usr/local/php
