@@ -79,6 +79,7 @@ RUN tar zxf php.tar.gz && rm -f php.tar.gz && \
     --enable-pcntl \
     --disable-cgi \
     --disable-phpdbg \
+    --with-pear \
     && \
     make -j4 > /dev/null && make install;
 #    --with-xmlrpc \  This extension is EXPERIMENTAL.
@@ -87,7 +88,8 @@ RUN tar zxf php.tar.gz && rm -f php.tar.gz && \
 #    --enable-shmop \
 #    --enable-sysvsem \
 #    --enable-ftp \
-#   --without-pear    will remove pecl
+# 从PHP7.4 开始需要手动 --with-pear, 之前是--without-pear
+# PEAR is disabled by default on PHP 7.4. As "PECL is a repository of PHP extensions that are made available to you via the PEAR packaging system", it also removes the PECL too.
 
 RUN cp ./php-${PHP_VERSION}/php.ini-production /usr/local/php/etc/php.ini && \
     mv /usr/local/php/etc/php-fpm.conf.default /usr/local/php/etc/php-fpm.conf && \
