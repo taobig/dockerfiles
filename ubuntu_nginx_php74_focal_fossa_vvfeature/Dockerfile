@@ -147,9 +147,43 @@ RUN echo "extension=psr.so" >> /usr/local/php/etc/php.ini
 RUN /usr/local/php/bin/php --ri phalcon
 
 
+RUN apt install -y build-essential autoconf libtool pkg-config  cmake
+# clang-5.0 libc++-dev
+
+RUN apt install -y golang
+RUN apt install -y curl git
+RUN apt install -y automake libtool build-essential
+RUN git clone --depth=1 -b v1.31.1 https://github.com/grpc/grpc
+RUN cd grpc && git submodule update --init
+
+#`bazel` or `cmake`.
+### Building with bazel (recommended)
+#
+#Bazel is the primary build system for gRPC C++ and if you're comfortable with using bazel, we can certainly recommend it.
+#Using bazel will give you the best developer experience as well as faster and cleaner builds.
+#
+#You'll need `bazel` version `1.0.0` or higher to build gRPC.
+#See [Installing Bazel](https://docs.bazel.build/versions/master/install.html) for instructions how to install bazel on your system.
+#We support building with `bazel` on Linux, MacOS and Windows.
+#
+#From the grpc repository root
+## Build gRPC C++
+#$ bazel build :all
+
+# `cmake`
+RUN  cd grpc && mkdir -p cmake/build && cd cmake/build && cmake ../.. &&  make
+#安装用于生成PHP代码的protoc plugin
+RUN cd grpc/cmake/build && make grpc_php_plugin
+#compile protoc -> protoc --version v3.12.2 用于生成php sdk
+RUN cd grpc/third_party/protobuf  && ./autogen.sh && ./configure && make && make install
+
+
+
 FROM ubuntu:20.04
 COPY --from=build-env /usr/local/nginx /usr/local/nginx
 COPY --from=build-env /usr/local/php /usr/local/php
+COPY --from=build-env /usr/local/bin/protoc  /usr/local/bin/protoc
+COPY --from=build-env /usr/local/src/grpc/cmake/build  /usr/local/grpc
 
 COPY --from=build-env   \
     /lib/x86_64-linux-gnu/liblzma.so.5 \
@@ -226,8 +260,8 @@ RUN useradd -m -s /sbin/nologin www && \
     ln  -s  /usr/local/php/bin/php-config    /usr/local/bin/php-config && \
     ln  -s  /usr/local/nginx/sbin/nginx    /usr/local/sbin/nginx && \
     chmod 755 /start.sh && \
-    apt-get update && apt-get install -y tzdata ca-certificates iputils-ping vim && apt-get clean && rm -rf /var/lib/apt/lists/* && \
-    ln -sf /usr/share/zoneinfo/Asia/Shanghai  /etc/localtime && dpkg-reconfigure -f noninteractive tzdata
+    ln -sf /usr/share/zoneinfo/Asia/Shanghai  /etc/localtime  && \
+    apt-get update && apt-get install -y git tzdata ca-certificates iputils-ping vim && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 #VOLUME ["/usr/local/nginx/html", "/usr/local/nginx/conf/ssl", "/usr/local/nginx/conf/vhost", "/usr/local/php/etc/php.d"]
