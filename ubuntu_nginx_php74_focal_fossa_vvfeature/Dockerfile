@@ -176,7 +176,10 @@ RUN  cd grpc && mkdir -p cmake/build && cd cmake/build && cmake ../.. &&  make
 RUN cd grpc/cmake/build && make grpc_php_plugin
 #compile protoc -> protoc --version v3.12.2 用于生成php sdk
 RUN cd grpc/third_party/protobuf  && ./autogen.sh && ./configure && make && make install
-
+#RUN file /usr/local/lib/libprotoc.so.23
+#/usr/local/lib/libprotoc.so.23: symbolic link to libprotoc.so.23.0.2
+#RUN file /usr/local/lib/libprotoc.so.23.0.2
+RUN cp -t  /usr/lib/  /usr/local/lib/libprotoc.so.23 /usr/local/lib/libprotobuf.so.23
 
 
 FROM ubuntu:20.04
