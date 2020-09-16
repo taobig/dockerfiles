@@ -185,8 +185,11 @@ RUN cp -t  /usr/lib/  /usr/local/lib/libprotoc.so.23 /usr/local/lib/libprotobuf.
 FROM ubuntu:20.04
 COPY --from=build-env /usr/local/nginx /usr/local/nginx
 COPY --from=build-env /usr/local/php /usr/local/php
+
 COPY --from=build-env /usr/local/bin/protoc  /usr/local/bin/protoc
-COPY --from=build-env /usr/local/src/grpc/cmake/build  /usr/local/grpc
+COPY --from=build-env /usr/local/src/grpc/cmake/build/grpc_php_plugin  /usr/local/bin/grpc_php_plugin
+COPY --from=build-env /usr/local/lib/libprotoc.so.23  /usr/local/lib/libprotoc.so.23
+COPY --from=build-env /usr/local/lib/libprotobuf.so.23  /usr/local/lib/libprotobuf.so.23
 
 COPY --from=build-env   \
     /lib/x86_64-linux-gnu/liblzma.so.5 \
