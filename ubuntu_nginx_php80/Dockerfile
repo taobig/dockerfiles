@@ -82,6 +82,7 @@ RUN     cd php-${PHP_VERSION} && \
     --enable-bcmath \
     --enable-exif \
     --enable-pcntl \
+    --with-pear \
     --disable-cgi \
     --disable-phpdbg \
     && \
@@ -100,6 +101,11 @@ RUN cp ./php-${PHP_VERSION}/php.ini-production /usr/local/php/etc/php.ini && \
     strip /usr/local/php/bin/php && \
     strip /usr/local/php/sbin/php-fpm && \
     strip /usr/local/nginx/sbin/nginx && \
+    ln  -s  /usr/local/php/bin/php    /usr/local/bin/php && \
+    ln  -s  /usr/local/php/bin/phpize    /usr/local/bin/phpize && \
+    ln  -s  /usr/local/php/bin/pecl    /usr/local/bin/pecl && \
+    ln  -s  /usr/local/php/bin/pear    /usr/local/bin/pear && \
+    ln  -s  /usr/local/php/bin/php-config    /usr/local/bin/php-config
     strip /usr/local/php/lib/php/extensions/no-debug-non-zts-20200804/opcache.so
 
 RUN sed -i 's/^;date\.timezone[ ]*=[ ]*/date\.timezone = Asia\/Shanghai/' /usr/local/php/etc/php.ini  && \
@@ -116,6 +122,8 @@ RUN sed -i 's/^;date\.timezone[ ]*=[ ]*/date\.timezone = Asia\/Shanghai/' /usr/l
     sed -i 's/^;listen.mode = 0660/listen.mode = 0660/' /usr/local/php/etc/php-fpm.d/www.conf
 #    sed -i 's/^;cgi\.fix_pathinfo[ ]*=[ ]*1/cgi\.fix_pathinfo=0/' /usr/local/php/etc/php.ini
 #    sed -i 's/^;security\.limit_extensions .../default setting is safe/' /usr/local/php/etc/php-fpm.d/www.conf  && \
+# 默认不开启扩展，请自行开启：zend_extension=/usr/local/php/lib/php/extensions/no-debug-non-zts-20200804/xdebug.so >> /usr/local/php/etc/php.ini
+RUN pecl install xdebug-3.0.0beta1
 
 # phpize need `/usr/local/php/include`
 RUN rm -rf /usr/local/php/include
@@ -197,6 +205,7 @@ RUN useradd -m -s /sbin/nologin www && \
     ln  -s  /usr/local/php/bin/php    /usr/local/bin/php && \
     ln  -s  /usr/local/php/bin/phpize    /usr/local/bin/phpize && \
     ln  -s  /usr/local/php/bin/pecl    /usr/local/bin/pecl && \
+    ln  -s  /usr/local/php/bin/pear    /usr/local/bin/pear && \
     ln  -s  /usr/local/php/bin/php-config    /usr/local/bin/php-config && \
     ln  -s  /usr/local/nginx/sbin/nginx    /usr/local/sbin/nginx && \
     chmod 755 /start.sh
