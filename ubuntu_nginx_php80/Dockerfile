@@ -106,7 +106,7 @@ RUN cp ./php-${PHP_VERSION}/php.ini-production /usr/local/php/etc/php.ini && \
     ln  -s  /usr/local/php/bin/phpize    /usr/local/bin/phpize && \
     ln  -s  /usr/local/php/bin/pecl    /usr/local/bin/pecl && \
     ln  -s  /usr/local/php/bin/pear    /usr/local/bin/pear && \
-    ln  -s  /usr/local/php/bin/php-config    /usr/local/bin/php-config
+    ln  -s  /usr/local/php/bin/php-config    /usr/local/bin/php-config && \
     strip /usr/local/php/lib/php/extensions/no-debug-non-zts-20200804/opcache.so
 
 RUN sed -i 's/^;date\.timezone[ ]*=[ ]*/date\.timezone = Asia\/Shanghai/' /usr/local/php/etc/php.ini  && \
