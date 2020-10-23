@@ -4,6 +4,7 @@ FROM ubuntu:20.04 AS build-env
 ENV NGINX_VERSION 1.18.0
 #https://www.php.net/
 ENV PHP_VERSION 8.0.0
+ENV XDEBUG_VERSION 3.0.0beta1
 
 #if not set WORKDIR, each RUN & CMD & ADD & COPY ... need to run `cd /usr/local/src`
 WORKDIR /usr/local/src
@@ -106,8 +107,9 @@ RUN cp ./php-${PHP_VERSION}/php.ini-production /usr/local/php/etc/php.ini && \
     ln  -s  /usr/local/php/bin/phpize    /usr/local/bin/phpize && \
     ln  -s  /usr/local/php/bin/pecl    /usr/local/bin/pecl && \
     ln  -s  /usr/local/php/bin/pear    /usr/local/bin/pear && \
-    ln  -s  /usr/local/php/bin/php-config    /usr/local/bin/php-config && \
-    strip /usr/local/php/lib/php/extensions/no-debug-non-zts-20200930/opcache.so
+    ln  -s  /usr/local/php/bin/php-config    /usr/local/bin/php-config
+#RUN strip /usr/local/php/lib/php/extensions/no-debug-non-zts-20200930/opcache.so
+RUN for tmp_file in /usr/local/php/lib/php/extensions/**/*;do strip $tmp_file; done;unset tmp_file;
 
 RUN sed -i 's/^;date\.timezone[ ]*=[ ]*/date\.timezone = Asia\/Shanghai/' /usr/local/php/etc/php.ini  && \
     sed -i 's/^session\.use_strict_mode = 0/session\.use_strict_mode = 1/' /usr/local/php/etc/php.ini  && \
@@ -124,7 +126,7 @@ RUN sed -i 's/^;date\.timezone[ ]*=[ ]*/date\.timezone = Asia\/Shanghai/' /usr/l
 #    sed -i 's/^;cgi\.fix_pathinfo[ ]*=[ ]*1/cgi\.fix_pathinfo=0/' /usr/local/php/etc/php.ini
 #    sed -i 's/^;security\.limit_extensions .../default setting is safe/' /usr/local/php/etc/php-fpm.d/www.conf  && \
 # 默认不开启扩展，请自行开启：zend_extension=/usr/local/php/lib/php/extensions/no-debug-non-zts-20200930/xdebug.so >> /usr/local/php/etc/php.ini
-RUN pecl install xdebug-3.0.0beta1
+RUN pecl install xdebug-${XDEBUG_VERSION}
 
 # phpize need `/usr/local/php/include`
 RUN rm -rf /usr/local/php/include
