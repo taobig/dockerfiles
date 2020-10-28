@@ -5,7 +5,7 @@ ENV COMPOSER_VERSION 1.10.16
 
 WORKDIR /app
 
-RUN apt-get update && apt-get install -y iputils-ping vim zip git mysql-client && apt-get clean && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y iputils-ping vim zip git mysql-client wget && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 RUN cd /usr/local/src && \
     wget -c -O composer.phar https://getcomposer.org/download/${COMPOSER_VERSION}/composer.phar && \
