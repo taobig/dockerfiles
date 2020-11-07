@@ -8,6 +8,7 @@
 | Branch: master | ubuntu_nginx_php72 | **taobig/nginx-php72** | `Ubuntu:18.04 + nginx 1.16 + PHP 7.2-FPM` composer + crontab + vim |
 | Branch: master | ubuntu_nginx_php73 | **taobig/nginx-php73** | `Ubuntu:18.04 + nginx 1.16 + PHP 7.3-FPM` composer + vim |
 | Branch: master | ubuntu_nginx_php74 | **taobig/nginx-php74** | `Ubuntu:18.04 + nginx 1.16 + PHP 7.4-FPM` composer + iputils + vim |
+| Branch: master | ubuntu_nginx_php74_focal_fossa | **taobig/nginx-php74:focal_fossa** | `Ubuntu:20.04 + nginx 1.18 + PHP 7.4-FPM` iputils + vim |
 
 ## usage
 > docker run --name ${container_name} -p ${expose_port}:80  -v ${custom_nginx_conf_dir}:/etc/nginx/conf.d -v ${code_dir}:/app -d taobig/nginx-php74 
