@@ -2,8 +2,7 @@ FROM centos:7.5.1804 AS build-env
 #MAINTAINER taobig
 
 ENV NGINX_VERSION 1.16.1
-ENV PHP_VERSION 7.1.31
-ENV COMPOSER_VERSION 1.9.2
+ENV PHP_VERSION 7.1.33
 
 #if not set WORKDIR, each RUN & CMD & ADD & COPY ... need to run `cd /usr/local/src`
 WORKDIR /usr/local/src
@@ -114,13 +113,11 @@ RUN pecl install swoole && \
     echo "env.name=dev" >> /usr/local/php/etc/php.ini
 
 RUN rm -rf /usr/local/php/include
-RUN wget -c -O composer https://getcomposer.org/download/${COMPOSER_VERSION}/composer.phar
 
 
 FROM centos:7.5.1804
 COPY --from=build-env /usr/local/nginx /usr/local/nginx
 COPY --from=build-env /usr/local/php /usr/local/php
-COPY --from=build-env /usr/local/src/composer /usr/local/bin/composer
 
 COPY --from=build-env /lib64/libcrypt.so.1   /lib64/libcrypt.so.1
 COPY --from=build-env /lib64/libz.so.1   /lib64/libz.so.1
@@ -178,8 +175,7 @@ ADD conf/nginx.conf /usr/local/nginx/conf/nginx.conf
 ADD conf/default_server.conf /etc/nginx/conf.d/default_server.conf
 
 ADD start.sh /start.sh
-RUN chmod +x /usr/local/bin/composer && \
-    chmod 755 /start.sh && \
+RUN chmod 755 /start.sh && \
     ln -sf /usr/share/zoneinfo/Asia/Shanghai  /etc/localtime
 
 WORKDIR /app
