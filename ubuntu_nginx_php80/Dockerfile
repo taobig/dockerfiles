@@ -51,7 +51,7 @@ RUN tar -zxf nginx.tar.gz && rm -f nginx.tar.gz && \
 
 RUN wget -c -O php.tar.gz http://php.net/distributions/php-${PHP_VERSION}.tar.gz
 RUN tar zxf php.tar.gz && rm -f php.tar.gz && \
-RUN     cd php-${PHP_VERSION} && \
+    cd php-${PHP_VERSION} && \
     ./buildconf && \
     ./configure --prefix=/usr/local/php \
     --with-config-file-path=/usr/local/php/etc \
