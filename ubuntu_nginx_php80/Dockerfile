@@ -4,7 +4,7 @@ FROM ubuntu:20.04 AS build-env
 ENV NGINX_VERSION 1.18.0
 #https://www.php.net/
 ENV PHP_VERSION 8.0.0
-ENV XDEBUG_VERSION 3.0.0beta1
+ENV XDEBUG_VERSION 3.0.0
 
 #if not set WORKDIR, each RUN & CMD & ADD & COPY ... need to run `cd /usr/local/src`
 WORKDIR /usr/local/src
@@ -49,12 +49,8 @@ RUN tar -zxf nginx.tar.gz && rm -f nginx.tar.gz && \
 #    --http-log-path=/var/log/nginx/access.log \
 #    --conf-path=/usr/local/nginx/nginx.conf \
 
-RUN apt-get install -y git
-#RUN ssh-keyscan -H github.com >> ~/.ssh/known_hosts && git clone git@github.com:php/php-src.git php-${PHP_VERSION}
-#RUN git clone https://github.com/php/php-src.git php-${PHP_VERSION} && cd php-${PHP_VERSION} && git pull
-RUN git clone -b PHP-8.0 https://github.com/php/php-src.git php-${PHP_VERSION} && cd php-${PHP_VERSION} && git pull
-#RUN wget -c -O php.tar.gz http://php.net/distributions/php-${PHP_VERSION}.tar.gz
-#RUN tar zxf php.tar.gz && rm -f php.tar.gz && \
+RUN wget -c -O php.tar.gz http://php.net/distributions/php-${PHP_VERSION}.tar.gz
+RUN tar zxf php.tar.gz && rm -f php.tar.gz && \
 RUN     cd php-${PHP_VERSION} && \
     ./buildconf && \
     ./configure --prefix=/usr/local/php \
