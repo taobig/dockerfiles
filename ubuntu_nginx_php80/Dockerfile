@@ -210,8 +210,9 @@ RUN useradd -m -s /sbin/nologin www && \
     ln  -s  /usr/local/nginx/sbin/nginx    /usr/local/sbin/nginx && \
     chmod 755 /start.sh
 
+RUN apt-get update && apt-get install -y ca-certificates && apt-get clean && rm -rf /var/lib/apt/lists/*
+
 WORKDIR /app
-#VOLUME ["/usr/local/nginx/html", "/usr/local/nginx/conf/ssl", "/usr/local/nginx/conf/vhost", "/usr/local/php/etc/php.d"]
 VOLUME ["/app"]
 
 #Set port
