@@ -30,7 +30,11 @@ php.ini settings:
 
 # build manually
 cd {dir}
-docker build -t taobig/php7x .
-docker run --rm --name php7 -d taobig/php7x
+docker build -t taobig/php80 .
+docker run --rm --name php8x -d taobig/php80
+
+docker build -t php8x .
+docker run --rm --name php8x -d php8x
+
 
 
