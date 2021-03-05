@@ -170,7 +170,7 @@ RUN echo "zend_extension=xdebug.so" >> /usr/local/php/etc/php.ini
 
 #RUN git clone https://github.com/edenhill/librdkafka.git
 #RUN cd librdkafka && ./configure && make && make install
-RUN apt install -y librdkafka-dev
+RUN yum install -y librdkafka-devel
 RUN pecl install rdkafka
 RUN echo "zend_extension=rdkafka.so" >> /usr/local/php/etc/php.ini
 
