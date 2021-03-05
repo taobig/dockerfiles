@@ -164,7 +164,7 @@ RUN echo "extension=grpc.so" >> /usr/local/php/etc/php.ini
 RUN echo "extension=protobuf.so" >> /usr/local/php/etc/php.ini
 
 ## xdebug
-RUN pecl install xdebug
+RUN pecl install xdebug-2.5.5
 #RUN echo "zend_extension=/usr/local/php/modules/xdebug.so" >> /usr/local/php/etc/php.ini
 RUN echo "zend_extension=xdebug.so" >> /usr/local/php/etc/php.ini
 
