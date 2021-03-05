@@ -168,6 +168,11 @@ RUN pecl install xdebug
 #RUN echo "zend_extension=/usr/local/php/modules/xdebug.so" >> /usr/local/php/etc/php.ini
 RUN echo "zend_extension=xdebug.so" >> /usr/local/php/etc/php.ini
 
+#RUN git clone https://github.com/edenhill/librdkafka.git
+#RUN cd librdkafka && ./configure && make && make install
+RUN apt install -y librdkafka-dev
+RUN pecl install rdkafka
+RUN echo "zend_extension=rdkafka.so" >> /usr/local/php/etc/php.ini
 
 FROM centos:7.5.1804
 COPY --from=build-env /usr/local/nginx /usr/local/nginx
