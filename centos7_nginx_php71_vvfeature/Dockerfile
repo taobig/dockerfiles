@@ -171,8 +171,10 @@ RUN echo "zend_extension=xdebug.so" >> /usr/local/php/etc/php.ini
 #RUN git clone https://github.com/edenhill/librdkafka.git
 #RUN cd librdkafka && ./configure && make && make install
 RUN yum install -y librdkafka-devel
+# 安装了librdkafka-devel后，下面需要复制/lib64/librdkafka.so.1
 RUN pecl install rdkafka
 RUN echo "zend_extension=rdkafka.so" >> /usr/local/php/etc/php.ini
+
 
 FROM centos:7.5.1804
 COPY --from=build-env /usr/local/nginx /usr/local/nginx
@@ -219,6 +221,7 @@ COPY --from=build-env \
     /lib64/libsasl2.so.3  \
     /lib64/libselinux.so.1 \
     /lib64/libpcre.so.1  \
+    /lib64/librdkafka.so.1  \
     \
     /lib64/
 
