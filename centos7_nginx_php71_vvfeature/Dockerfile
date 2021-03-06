@@ -173,7 +173,7 @@ RUN echo "zend_extension=xdebug.so" >> /usr/local/php/etc/php.ini
 RUN yum install -y librdkafka-devel
 # 安装了librdkafka-devel后，下面需要复制/lib64/librdkafka.so.1
 RUN pecl install rdkafka
-RUN echo "zend_extension=rdkafka.so" >> /usr/local/php/etc/php.ini
+RUN echo "extension=rdkafka.so" >> /usr/local/php/etc/php.ini
 
 
 FROM centos:7.5.1804
