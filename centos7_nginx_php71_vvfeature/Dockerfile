@@ -244,6 +244,7 @@ ADD conf/default_server.conf /etc/nginx/conf.d/default_server.conf
 ADD start.sh /start.sh
 RUN chmod +x /usr/local/bin/composer && \
     chmod 755 /start.sh && \
+    yum install -y git && yum clean all && \
     ln -sf /usr/share/zoneinfo/Asia/Shanghai  /etc/localtime
 
 WORKDIR /app
