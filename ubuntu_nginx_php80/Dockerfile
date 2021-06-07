@@ -1,9 +1,9 @@
 FROM ubuntu:20.04 AS build-env
 
 #http://nginx.org/en/download.html
-ENV NGINX_VERSION 1.20.0
+ENV NGINX_VERSION 1.20.1
 #https://www.php.net/
-ENV PHP_VERSION 8.0.3
+ENV PHP_VERSION 8.0.7
 #https://xdebug.org/
 ENV XDEBUG_VERSION 3.0.4
 
