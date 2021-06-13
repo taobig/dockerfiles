@@ -7,9 +7,9 @@
 | Branch: master | centos7_nginx_php71 | **taobig/nginx-php7-fpm:7.1** | `CentOS 7.5.1804 + nginx 1.16 + PHP 7.1-FPM` composer |
 | Branch: master | ubuntu_nginx_php72 | **taobig/nginx-php72** | `Ubuntu:18.04 + nginx 1.16 + PHP 7.2-FPM` composer + crontab + vim |
 | Branch: master | ubuntu_nginx_php73 | **taobig/nginx-php73** | `Ubuntu:18.04 + nginx 1.16 + PHP 7.3-FPM` composer + vim |
-| Branch: master | ubuntu_nginx_php74 | **taobig/nginx-php74** | `Ubuntu:18.04 + nginx 1.16 + PHP 7.4-FPM` composer + iputils + vim |
+| Branch: master | ubuntu_nginx_php74 | **taobig/nginx-php74** | `Ubuntu:18.04 + nginx 1.16 + PHP 7.4-FPM` |
 | Branch: master | ubuntu_nginx_php74_focal_fossa | **taobig/nginx-php74:focal_fossa** | `Ubuntu:20.04 + nginx 1.18 + PHP 7.4-FPM` iputils + vim |
-| Branch: master | ubuntu_nginx_php80 | **taobig/nginx-php80** | `Ubuntu:20.04 + nginx 1.18 + PHP 8.0-FPM` |
+| Branch: master | ubuntu_nginx_php80 | **taobig/nginx-php80** | `Ubuntu:20.04 + nginx 1.20 + PHP 8.0-FPM` |
 
 ## usage
 > docker run --name ${container_name} -p ${expose_port}:80  -v ${custom_nginx_conf_dir}:/etc/nginx/conf.d -v ${code_dir}:/app -d taobig/nginx-php74 
@@ -34,7 +34,7 @@ docker build -t taobig/php80 .
 docker run --rm --name php8x -d taobig/php80
 
 docker build -t php8x .
-docker run --rm --name php8x -d php8x
+docker run --rm --name php80 -d taobig/nginx-php80
 
 
 
