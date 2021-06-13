@@ -3,7 +3,7 @@ FROM ubuntu:18.04 AS build-env
 #http://nginx.org/en/download.html
 ENV NGINX_VERSION 1.16.1
 #https://www.php.net/
-ENV PHP_VERSION 7.4.11
+ENV PHP_VERSION 7.4.20
 
 #if not set WORKDIR, each RUN & CMD & ADD & COPY ... need to run `cd /usr/local/src`
 WORKDIR /usr/local/src
