@@ -2,7 +2,8 @@ FROM centos:7.5.1804 AS build-env
 
 ENV NGINX_VERSION 1.16.1
 ENV PHP_VERSION 7.1.33
-ENV COMPOSER_VERSION 1.9.2
+#https://getcomposer.org/
+ENV COMPOSER_VERSION 2.1.6
 
 #if not set WORKDIR, each RUN & CMD & ADD & COPY ... need to run `cd /usr/local/src`
 WORKDIR /usr/local/src
