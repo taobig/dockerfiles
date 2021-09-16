@@ -41,7 +41,7 @@ RUN wget -c -O nginx.tar.gz http://nginx.org/download/nginx-$NGINX_VERSION.tar.g
     --with-http_ssl_module \
     --with-http_gzip_static_module \
     --with-http_stub_status_module && \
-    make -j4 > /dev/null && make install
+    make -j8 > /dev/null && make install
 RUN wget -c -O php.tar.gz http://php.net/distributions/php-${PHP_VERSION}.tar.gz
 #ADD cmake-3.12.4.tar.gz .
 #RUN cd cmake-3.12.4 &&  ./bootstrap && make && make install
@@ -91,7 +91,7 @@ RUN cd php-${PHP_VERSION} && \
     --disable-cgi \
     --disable-phpdbg
 
-RUN cd php-${PHP_VERSION} && make -j4 && make install && cd .. && \
+RUN cd php-${PHP_VERSION} && make -j8 && make install && cd .. && \
     cp ./php-${PHP_VERSION}/php.ini-production /usr/local/php/etc/php.ini && \
     mv /usr/local/php/etc/php-fpm.conf.default /usr/local/php/etc/php-fpm.conf && \
     mv /usr/local/php/etc/php-fpm.d/www.conf.default /usr/local/php/etc/php-fpm.d/www.conf  && \
@@ -164,8 +164,8 @@ RUN  pecl install grpc-1.22.0 protobuf-3.8.0
 RUN echo "extension=grpc.so" >> /usr/local/php/etc/php.ini
 RUN echo "extension=protobuf.so" >> /usr/local/php/etc/php.ini
 
-## xdebug
-RUN pecl install xdebug-2.5.5
+## xdebug(xdebug-3.0: Deprecate PHP 7.1 support)
+RUN pecl install xdebug-2.9.8
 #RUN echo "zend_extension=/usr/local/php/modules/xdebug.so" >> /usr/local/php/etc/php.ini
 RUN echo "zend_extension=xdebug.so" >> /usr/local/php/etc/php.ini
 

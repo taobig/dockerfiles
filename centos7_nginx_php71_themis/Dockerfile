@@ -159,8 +159,8 @@ RUN  pecl install grpc-1.22.0 protobuf-3.8.0
 RUN echo "extension=grpc.so" >> /usr/local/php/etc/php.ini
 RUN echo "extension=protobuf.so" >> /usr/local/php/etc/php.ini
 
-## xdebug
-RUN pecl install xdebug
+## xdebug(xdebug-3.0: Deprecate PHP 7.1 support)
+RUN pecl install xdebug-2.9.8
 #RUN echo "zend_extension=/usr/local/php/modules/xdebug.so" >> /usr/local/php/etc/php.ini
 RUN echo "zend_extension=xdebug.so" >> /usr/local/php/etc/php.ini
 
@@ -231,6 +231,7 @@ ADD conf/default_server.conf /etc/nginx/conf.d/default_server.conf
 ADD start.sh /start.sh
 RUN chmod +x /usr/local/bin/composer && \
     chmod 755 /start.sh && \
+    yum install -y git && yum clean all && \
     ln -sf /usr/share/zoneinfo/Asia/Shanghai  /etc/localtime
 
 WORKDIR /app
