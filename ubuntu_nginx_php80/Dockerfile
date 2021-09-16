@@ -3,7 +3,7 @@ FROM ubuntu:20.04 AS build-env
 #http://nginx.org/en/download.html
 ENV NGINX_VERSION 1.20.1
 #https://www.php.net/
-ENV PHP_VERSION 8.0.7
+ENV PHP_VERSION 8.0.10
 #https://xdebug.org/
 ENV XDEBUG_VERSION 3.0.4
 
@@ -45,7 +45,7 @@ RUN tar -zxf nginx.tar.gz && rm -f nginx.tar.gz && \
     --with-http_ssl_module \
     --with-http_gzip_static_module \
     --with-http_stub_status_module && \
-    make -j4 > /dev/null && make install
+    make -j8 > /dev/null && make install
 #    --error-log-path=/var/log/nginx/error.log \
 #    --http-log-path=/var/log/nginx/access.log \
 #    --conf-path=/usr/local/nginx/nginx.conf \
@@ -85,7 +85,7 @@ RUN tar zxf php.tar.gz && rm -f php.tar.gz && \
     --disable-cgi \
     --disable-phpdbg \
     && \
-    make -j4 > /dev/null && make install;
+    make -j8 > /dev/null && make install;
 #    --with-xmlrpc \  This extension is EXPERIMENTAL.
 #    --with-mhash \
 #    --disable-ctype \
