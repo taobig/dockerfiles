@@ -1,11 +1,11 @@
 FROM ubuntu:20.04 AS build-env
 
 #http://nginx.org/en/download.html
-ENV NGINX_VERSION 1.20.1
+ENV NGINX_VERSION 1.20.2
 #https://www.php.net/
-ENV PHP_VERSION 8.0.10
+ENV PHP_VERSION 8.0.13
 #https://xdebug.org/
-ENV XDEBUG_VERSION 3.0.4
+ENV XDEBUG_VERSION 3.1.1
 
 #if not set WORKDIR, each RUN & CMD & ADD & COPY ... need to run `cd /usr/local/src`
 WORKDIR /usr/local/src
@@ -124,7 +124,7 @@ RUN sed -i 's/^;date\.timezone[ ]*=[ ]*/date\.timezone = Asia\/Shanghai/' /usr/l
 #    sed -i 's/^;security\.limit_extensions .../default setting is safe/' /usr/local/php/etc/php-fpm.d/www.conf  && \
 RUN pecl install xdebug-${XDEBUG_VERSION}
 # 默认不开启扩展，请自行开启：zend_extension=/usr/local/php/lib/php/extensions/no-debug-non-zts-20200930/xdebug.so >> /usr/local/php/etc/php.ini
-#RUN echo "zend_extension=xdebug.so" >> /usr/local/php/etc/php.ini
+RUN echo "#zend_extension=xdebug.so" >> /usr/local/php/etc/php.ini
 
 # phpize need `/usr/local/php/include`; pecl安装扩展还需要依赖autoconf等工具
 RUN rm -rf /usr/local/php/include
