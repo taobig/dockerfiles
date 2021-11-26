@@ -71,7 +71,6 @@ RUN tar zxf php.tar.gz && rm -f php.tar.gz && \
     --with-freetype \
     --enable-fpm \
     --enable-xml \
-    --enable-inline-optimization \
     --enable-mbregex \
     --enable-mbstring \
     --enable-mysqlnd \
@@ -93,6 +92,7 @@ RUN tar zxf php.tar.gz && rm -f php.tar.gz && \
 #    --enable-sysvsem \
 #    --enable-ftp \
 #   --without-pear    will remove pecl
+# --enable-inline-optimization  PHP8.1移除了此编译选项：configure: WARNING: unrecognized options: --enable-inline-optimization
 
 RUN cp ./php-${PHP_VERSION}/php.ini-production /usr/local/php/etc/php.ini && \
     mv /usr/local/php/etc/php-fpm.conf.default /usr/local/php/etc/php-fpm.conf && \
