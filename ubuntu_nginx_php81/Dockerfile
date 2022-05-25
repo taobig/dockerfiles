@@ -1,11 +1,11 @@
 FROM ubuntu:20.04 AS build-env
 
 #http://nginx.org/en/download.html
-ENV NGINX_VERSION 1.20.2
+ENV NGINX_VERSION 1.22.0
 #https://www.php.net/
-ENV PHP_VERSION 8.1.4
+ENV PHP_VERSION 8.1.6
 #https://xdebug.org/
-ENV XDEBUG_VERSION 3.1.3
+ENV XDEBUG_VERSION 3.1.4
 
 #if not set WORKDIR, each RUN & CMD & ADD & COPY ... need to run `cd /usr/local/src`
 WORKDIR /usr/local/src
