@@ -34,9 +34,9 @@ php.ini settings:
 # build manually
 ```bash
 cd {dir}
-docker build -t taobig/nginx-php80 .
-docker build -t taobig/nginx-php80:dev .
-docker run --rm --name php80 -d taobig/nginx-php80
+docker build -t taobig/nginx-php81 .
+docker build -t taobig/nginx-php81:dev .
+docker run --rm --name php81 -d taobig/nginx-php81
 
 
 docker build -t php8x .
