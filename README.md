@@ -1,16 +1,17 @@
 # 
 
 ## Docker images  
-| Source Code    | Dockerfile location | Docker image | Desc                                                               |
-|----------------| ------ | ------ |--------------------------------------------------------------------|
-| Branch: eol    | centos7_nginx_php70 | **taobig/nginx-php7-fpm:7.0** | `CentOS 7.4.1708 + nginx 1.14.2 + PHP 7.0.33-FPM` + composer       |
-| Branch: eol | centos7_nginx_php71 | **taobig/nginx-php7-fpm:7.1** | `CentOS 7.5.1804 + nginx 1.16 + PHP 7.1-FPM` + composer            |
-| Branch: eol | ubuntu_nginx_php72 | **taobig/nginx-php72** | `Ubuntu:18.04 + nginx 1.16 + PHP 7.2-FPM` composer + crontab + vim |
-| Branch: eol | ubuntu_nginx_php73 | **taobig/nginx-php73** | `Ubuntu:18.04 + nginx 1.16 + PHP 7.3-FPM` composer + vim           |
-| Branch: master | ubuntu_nginx_php74 | **taobig/nginx-php74** | `Ubuntu:18.04 + nginx 1.16 + PHP 7.4-FPM`                          |
+| Source Code    | Dockerfile location            | Docker image                       | Desc                                                               |
+|----------------|--------------------------------|------------------------------------|--------------------------------------------------------------------|
+| Branch: eol    | centos7_nginx_php70            | **taobig/nginx-php7-fpm:7.0**      | `CentOS 7.4.1708 + nginx 1.14.2 + PHP 7.0.33-FPM` + composer       |
+| Branch: eol | centos7_nginx_php71            | **taobig/nginx-php7-fpm:7.1**      | `CentOS 7.5.1804 + nginx 1.16 + PHP 7.1-FPM` + composer            |
+| Branch: eol | ubuntu_nginx_php72             | **taobig/nginx-php72**             | `Ubuntu:18.04 + nginx 1.16 + PHP 7.2-FPM` composer + crontab + vim |
+| Branch: eol | ubuntu_nginx_php73             | **taobig/nginx-php73**             | `Ubuntu:18.04 + nginx 1.16 + PHP 7.3-FPM` composer + vim           |
+| Branch: master | ubuntu_nginx_php74             | **taobig/nginx-php74**             | `Ubuntu:18.04 + nginx 1.16 + PHP 7.4-FPM`                          |
 | Branch: master | ubuntu_nginx_php74_focal_fossa | **taobig/nginx-php74:focal_fossa** | `Ubuntu:20.04 + nginx 1.18 + PHP 7.4-FPM` iputils + vim            |
-| Branch: master | ubuntu_nginx_php80 | **taobig/nginx-php80** | `Ubuntu:20.04 + nginx 1.20 + PHP 8.0-FPM`                          |
-| Branch: master | ubuntu_nginx_php81 | **taobig/nginx-php81** | `Ubuntu:20.04 + nginx 1.22 + PHP 8.1-FPM`                          |
+| Branch: master | ubuntu_nginx_php80             | **taobig/nginx-php80**             | `Ubuntu:20.04 + nginx 1.20 + PHP 8.0-FPM`                          |
+| Branch: master | ubuntu_nginx_php81             | **taobig/nginx-php81**             | `Ubuntu:20.04 + nginx 1.22 + PHP 8.1-FPM`                          |
+| Branch: master | ubuntu_nginx_php82             | **taobig/nginx-php82**             | `Ubuntu:20.04 + nginx 1.22 + PHP 8.2-FPM`                          |
 
 ## usage
 ```shell
