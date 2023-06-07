@@ -11,7 +11,7 @@
 | Branch: master | ubuntu_nginx_php74_focal_fossa | **taobig/nginx-php74:focal_fossa** | `Ubuntu:20.04 + nginx 1.18 + PHP 7.4-FPM` iputils + vim            |
 | Branch: master | ubuntu_nginx_php80             | **taobig/nginx-php80**             | `Ubuntu:20.04 + nginx 1.20 + PHP 8.0-FPM`                          |
 | Branch: master | ubuntu_nginx_php81             | **taobig/nginx-php81**             | `Ubuntu:20.04 + nginx 1.22 + PHP 8.1-FPM`                          |
-| Branch: master | ubuntu_nginx_php82             | **taobig/nginx-php82**             | `Ubuntu:20.04 + nginx 1.22 + PHP 8.2-FPM`                          |
+| Branch: master | ubuntu_nginx_php82             | **taobig/nginx-php82**             | `Ubuntu:20.04 + nginx 1.24 + PHP 8.2-FPM`                          |
 
 ## usage
 ```shell
@@ -25,26 +25,22 @@ nginx log is in /var/log/nginx
 php.ini come from  php.ini-production  
 php.ini settings:
 1. date.timezone = Asia/Shanghai
-1. session.use_strict_mode = 1
-1. session.cookie_httponly = 1
-1. memory_limit = 128M
-1. expose_php = Off
-1. upload_max_filesize = 100M
+2. session.use_strict_mode = 1
+3. session.cookie_httponly = 1
+4. memory_limit = 128M
+5. expose_php = Off
+6. upload_max_filesize = 100M
+7. max_execution_time = 60
+8. request_terminate_timeout = 120
+9. ...
 
 
 # build manually
 ```bash
-cd {dir}
-docker build -t taobig/nginx-php81 .
-docker build -t taobig/nginx-php81:dev .
+cd ubuntu_nginx_php81
+docker build --pull -t taobig/nginx-php81 .
 docker run --rm --name php81 -d taobig/nginx-php81
 
-
-docker build -t php8x .
-docker run --rm --name php8x -d php8x
-
+cd ubuntu_nginx_php81_dev
+docker build --pull -t taobig/nginx-php81:dev .
 ```
-
-
-
-
