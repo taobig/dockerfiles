@@ -1,0 +1,21 @@
+name: Docker Image CI
+
+on: [workflow_dispatch]
+#on:
+#  push:
+#    branches: [ "master", "test" ]
+#  pull_request:
+#    branches: [ "master" ]
+
+jobs:
+
+  build_php82:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build the Docker image
+        run: cd ubuntu_nginx_php82 && docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+
+# 发布 Docker 映像: https://docs.github.com/zh/actions/publishing-packages/publishing-docker-images
