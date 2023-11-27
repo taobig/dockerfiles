@@ -3,7 +3,7 @@ FROM ubuntu:20.04 AS build-env
 #http://nginx.org/en/download.html
 ENV NGINX_VERSION 1.24.0
 #https://www.php.net/
-ENV PHP_VERSION 8.2.8
+ENV PHP_VERSION 8.2.13
 #https://xdebug.org/ 安装xdebug扩展但是默认不开启
 ENV XDEBUG_VERSION 3.2.2
 
@@ -108,20 +108,20 @@ RUN cp ./php-${PHP_VERSION}/php.ini-production /usr/local/php/etc/php.ini && \
 #RUN strip /usr/local/php/lib/php/extensions/no-debug-non-zts-20200930/opcache.so
 RUN for tmp_file in /usr/local/php/lib/php/extensions/**/*;do strip $tmp_file; done;unset tmp_file;
 
-RUN sed -i 's/^;date\.timezone[ ]*=[ ]*/date\.timezone = Asia\/Shanghai/' /usr/local/php/etc/php.ini  && \
-    sed -i 's/^session\.use_strict_mode = 0/session\.use_strict_mode = 1/' /usr/local/php/etc/php.ini  && \
+RUN sed -i 's/^;date\.timezone[ ]*=[ ]*/date\.timezone = Asia\/Shanghai/' /usr/local/php/etc/php.ini && \
+    sed -i 's/^session\.use_strict_mode = 0/session\.use_strict_mode = 1/' /usr/local/php/etc/php.ini && \
     sed -i 's/^session\.cookie_httponly =$/session\.cookie_httponly = 1/' /usr/local/php/etc/php.ini && \
     sed -i 's/^memory_limit = 128M/memory_limit = 128M/' /usr/local/php/etc/php.ini && \
     sed -i 's/^expose_php = On/expose_php = Off/' /usr/local/php/etc/php.ini && \
     sed -i 's/^upload_max_filesize = 2M/upload_max_filesize = 100M/' /usr/local/php/etc/php.ini && \
     sed -i 's/^max_execution_time = 30/max_execution_time = 60/' /usr/local/php/etc/php.ini && \
     sed -i 's/^;request_terminate_timeout = 0/request_terminate_timeout = 120/' /usr/local/php/etc/php-fpm.d/www.conf && \
-    sed -i 's/^listen = 127\.0\.0\.1:9000/listen = \/var\/run\/php-fpm\.sock/' /usr/local/php/etc/php-fpm.d/www.conf  && \
-    sed -i 's/^;listen.owner = www/listen.owner = www/' /usr/local/php/etc/php-fpm.d/www.conf  && \
-    sed -i 's/^;listen.group = www/listen.group = www/' /usr/local/php/etc/php-fpm.d/www.conf  && \
+    sed -i 's/^listen = 127\.0\.0\.1:9000/listen = \/var\/run\/php-fpm\.sock/' /usr/local/php/etc/php-fpm.d/www.conf && \
+    sed -i 's/^;listen.owner = www/listen.owner = www/' /usr/local/php/etc/php-fpm.d/www.conf && \
+    sed -i 's/^;listen.group = www/listen.group = www/' /usr/local/php/etc/php-fpm.d/www.conf && \
     sed -i 's/^;listen.mode = 0660/listen.mode = 0660/' /usr/local/php/etc/php-fpm.d/www.conf
 #    sed -i 's/^;cgi\.fix_pathinfo[ ]*=[ ]*1/cgi\.fix_pathinfo=0/' /usr/local/php/etc/php.ini
-#    sed -i 's/^;security\.limit_extensions .../default setting is safe/' /usr/local/php/etc/php-fpm.d/www.conf  && \
+#    sed -i 's/^;security\.limit_extensions .../default setting is safe/' /usr/local/php/etc/php-fpm.d/www.conf && \
 RUN pecl install xdebug-${XDEBUG_VERSION}
 # 默认不开启扩展，请自行开启：zend_extension=/usr/local/php/lib/php/extensions/no-debug-non-zts-20200930/xdebug.so >> /usr/local/php/etc/php.ini
 RUN echo "#zend_extension=xdebug.so" >> /usr/local/php/etc/php.ini
