@@ -1,7 +1,7 @@
 FROM taobig/nginx-php80:latest
 
 #https://getcomposer.org/
-ENV COMPOSER_VERSION 2.1.12
+ENV COMPOSER_VERSION 2.1.14
 
 WORKDIR /app
 
