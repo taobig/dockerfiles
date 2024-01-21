@@ -11,6 +11,7 @@
 | eol/ubuntu_nginx_php74_focal_fossa | **taobig/nginx-php74:focal_fossa** | `Ubuntu:20.04 + nginx:1.18.0 + PHP 7.4.33-FPM`                            |
 | eol/ubuntu_nginx_php80             | **taobig/nginx-php80**             | `Ubuntu:20.04 + nginx:1.20.2 + PHP 8.0.30-FPM`                            |
 | ubuntu_nginx_php81                 | **taobig/nginx-php81**             | `Ubuntu:20.04 + nginx:1.22 + PHP 8.1-FPM`                                 |
+| ubuntu_caddy_php81                 | **taobig/caddy-php81**             | `Ubuntu:20.04 + caddy:2.7 + PHP 8.1-FPM`                                  |
 | ubuntu_nginx_php82                 | **taobig/nginx-php82**             | `Ubuntu:20.04 + nginx:1.24 + PHP 8.2-FPM`                                 |
 | ubuntu_nginx_php83                 | **taobig/nginx-php83**             | `Ubuntu:20.04 + nginx:1.24 + PHP 8.3-FPM`                                 |
 

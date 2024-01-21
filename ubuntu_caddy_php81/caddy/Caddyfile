@@ -1,0 +1,80 @@
+{
+	# 启用调试模式，将默认日至器的日志级别设置为DEBUG。这将展示在排除故障时展示更多有用的细节（且在生产模式下将非常详细）。请你在社区寻求帮助之前先启用此功能。
+	# 启用debug，会导致log模块缺省的level INFO变成为DEBUG
+	# debug
+	# http_port 80 # 服务器用于HTTP的端口。仅限内部使用; 不会更改客户端的HTTP端口。默认：80
+	# https_port 443 # 服务器用于HTTPS的端口。仅限内部使用; 不会更改客户端的HTTPS端口。默认：443
+	# order replace after encode
+
+	# https://caddy2.dengxiaolong.com/docs/caddyfile/options#admin
+	# admin开启后（缺省是开启的），必须本地才能访问： curl http://localhost:2019/metrics
+	# admin off
+	log default {
+		format console
+		output file /var/log/caddy/system.log
+		level INFO
+		exclude http.log.access
+	}
+	# 在监听域名配置段配置log，避免重复记录日志
+	#	log default2 {
+	#		output file /var/log/caddy/access.log
+	#		format console
+	#		level INFO
+	#		include http.log.access
+	#	}
+	log default3 {
+		output file /var/log/caddy/error.log
+		format console
+		# level is the minimum entry level to log. Possible values: DEBUG, INFO, WARN, ERROR, PANIC, FATAL. Default: INFO.
+		level ERROR
+		# exclude http.log.access
+	}
+	# grace_period <duration> # 定义在配置重新加载期间关闭HTTP服务器的宽限期。如果客户端没有在宽限期内完成他们的请求，服务器将被强制终止以允许重新加载完成并释放资源。默认情况下，没有设置宽限期。
+
+	# https://caddyserver.com/docs/caddyfile/options#auto-https
+	auto_https off
+
+	# 服务器选项
+	# 使用可能跨越多个站点的设置自定义HTTP服务器，因此无法在站点块中正确配置。这些选项会影响侦听器/套接字或 HTTP 层下的其他行为。
+	# 可以多次指定，使用不同的listener_address值，为每个服务器配置不同的选项。例如，servers :443将仅适用于绑定到侦听器地址的服务器:443。省略侦听器地址会将选项应用于任何剩余的服务器。
+	servers :80 {
+		# https://caddyserver.com/docs/caddyfile/options#protocols
+		# Currently, enabling HTTP/2 (including H2C) necessarily implies enabling HTTP/1.1 because the Go standard library does not let us disable HTTP/1.1 when using its HTTP server. However, either HTTP/1.1 or HTTP/3 can be enabled independently.
+		# Note that H2C ("Cleartext HTTP/2" or "H2 over TCP") and HTTP/3 are not implemented by the Go standard library, so some functionality or features may be limited. We recommend against enabling H2C unless it is absolutely necessary for your application.
+		# protocols h1 h2 h2c h3
+		protocols h1 h2 h3
+		# DEPRECATED: protocol sub-option will be removed soon
+		# protocol {
+		# 	allow_h2c
+		# }
+		timeouts {
+			read_body 65s # Defaults to no timeout.
+			# read_header <duration>
+			# write       <duration>
+			# idle        <duration> # idle is a duration value that sets the maximum time to wait for the next request when keep-alives are enabled. Defaults to 5 minutes to help avoid resource exhaustion.
+		}
+
+		# The maximum size to parse from a client's HTTP request headers. If the limit is exceeded, the server will respond with HTTP status 431 Request Header Fields Too Large. It accepts all formats supported by go-humanize.
+		# By default, the limit is 1MB.
+		# max_header_size <size>
+
+		# Since Caddy v2.5, by default, headers with potentially sensitive information (Cookie, Set-Cookie, Authorization and Proxy-Authorization) will be logged with empty values in access logs (see the log directive).
+		# If you wish to not have these headers redacted, you may enable the log_credentials option.
+		# 只有启用log_credentials才会记录这些potentially sensitive information，缺省时是不记录！
+		# log_credentials
+	}
+}
+
+# You can define special blocks called snippets by giving them a name surrounded in parentheses:
+(common) {
+	# Remove the Added "Server" Response Header
+	# 方法一：
+	header -Server
+	# 方法二：
+	# header /* {
+	# 	-Server
+	# }
+}
+
+#import config/*
+import sites/*
