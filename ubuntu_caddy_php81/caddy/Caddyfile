@@ -66,7 +66,7 @@
 }
 
 # You can define special blocks called snippets by giving them a name surrounded in parentheses:
-(common) {
+(disableServerHeader) {
 	# Remove the Added "Server" Response Header
 	# 方法一：
 	header -Server

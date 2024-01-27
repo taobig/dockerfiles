@@ -12,6 +12,8 @@ ARG XDEBUG_VERSION=3.2.2
 FROM golang:1.21-alpine AS build-caddy
 
 ARG CADDY_VERSION
+ARG OS="linux"
+ARG ARCH="amd64"
 
 WORKDIR /usr/local/src
 # RUN go install github.com/caddyserver/xcaddy/cmd/xcaddy@latest
@@ -19,7 +21,7 @@ WORKDIR /usr/local/src
 # # RUN xcaddy build v2.7.6 --with github.com/ueffel/caddy-brotli # 指定要构建的caddy的版本
 # RUN xcaddy build v${CADDY_VERSION} \
 #         --with github.com/ueffel/caddy-brotli
-RUN wget -c -O caddy.tar.gz https://github.com/caddyserver/caddy/releases/download/v${CADDY_VERSION}/caddy_${CADDY_VERSION}_linux_amd64.tar.gz
+RUN wget -c -O caddy.tar.gz https://github.com/caddyserver/caddy/releases/download/v${CADDY_VERSION}/caddy_${CADDY_VERSION}_${OS}_${ARCH}.tar.gz
 RUN tar -zxf caddy.tar.gz && rm -rf caddy.tar.gz
 
 
