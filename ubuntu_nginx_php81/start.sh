@@ -6,4 +6,4 @@
 
 #tail -f /start.sh
 #tail -f /usr/local/php/var/log/php-fpm.log
-tail -f /var/log/nginx/error.log;
+#tail -f /var/log/nginx/error.log;
