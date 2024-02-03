@@ -213,6 +213,13 @@ RUN useradd -m -s /sbin/nologin www && \
 
 RUN apt-get update && apt-get install -y ca-certificates && apt-get clean && rm -rf /var/lib/apt/lists/*
 
+# --interval=<间隔>：两次健康检查的间隔，默认为 30 秒；
+# --timeout=<时长>：健康检查命令运行超时时间，如果超过这个时间，本次健康检查就被视为失败，默认 30 秒；
+# --retries=<次数>：当连续失败指定次数后，则将容器状态视为 unhealthy，默认 3 次。
+# 实测发现，使用`pgrep php-fpm`/`pidof php-fpm`，如果频率太高，会导致容器占用过高的CPU，所以要取舍。
+HEALTHCHECK --interval=5s --timeout=3s --retries=2 \
+  CMD pidof php-fpm || exit 1
+
 WORKDIR /app
 VOLUME ["/app"]
 
