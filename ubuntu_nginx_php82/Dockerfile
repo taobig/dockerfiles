@@ -3,9 +3,10 @@ FROM ubuntu:20.04 AS build-env
 #http://nginx.org/en/download.html
 ARG NGINX_VERSION=1.24.0
 #https://www.php.net/
-ARG PHP_VERSION=8.2.15
+ARG PHP_VERSION=8.2.18
 #https://xdebug.org/ 安装xdebug扩展但是默认不开启
-ARG XDEBUG_VERSION=3.2.2
+#https://xdebug.org/docs/compat
+ARG XDEBUG_VERSION=3.3.2
 
 #if not set WORKDIR, each RUN & CMD & ADD & COPY ... need to run `cd /usr/local/src`
 WORKDIR /usr/local/src
