@@ -8,7 +8,7 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive TZ=Asia/Shanghai apt-get in
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # https://getcomposer.org/
-ARG COMPOSER_VERSION=2.7.6
+ARG COMPOSER_VERSION=2.7.7
 
 RUN cd /usr/local/src && \
     wget -c -O composer.phar https://getcomposer.org/download/${COMPOSER_VERSION}/composer.phar && \
