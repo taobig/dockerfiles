@@ -3,7 +3,7 @@ FROM ubuntu:20.04 AS build-env
 #http://nginx.org/en/download.html
 ARG NGINX_VERSION=1.24.0
 #https://www.php.net/
-ARG PHP_VERSION=8.2.18
+ARG PHP_VERSION=8.2.22
 #https://xdebug.org/ 安装xdebug扩展但是默认不开启
 #https://xdebug.org/docs/compat
 ARG XDEBUG_VERSION=3.3.2

@@ -1,2 +1,4 @@
 .idea
 .fleet
+# Mac DS_Store Files
+.DS_Store
