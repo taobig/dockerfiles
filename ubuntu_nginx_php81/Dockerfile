@@ -1,16 +1,9 @@
 FROM ubuntu:20.04 AS build-env
 
-#http://nginx.org/en/download.html
-ARG NGINX_VERSION=1.22.1
-#https://www.php.net/
-ARG PHP_VERSION=8.1.29
-#https://xdebug.org/ 安装xdebug扩展但是默认不开启
-#https://xdebug.org/docs/compat
-ARG XDEBUG_VERSION=3.3.2
-
 #if not set WORKDIR, each RUN & CMD & ADD & COPY ... need to run `cd /usr/local/src`
 WORKDIR /usr/local/src
 
+RUN nproc
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get -y update
 RUN apt-get install -y wget
@@ -21,6 +14,16 @@ RUN apt-get install -y build-essential autoconf make automake bison re2c libxml2
 RUN apt-get install -y libsqlite3-dev libonig-dev
 # 20.04 add: libpcre3-dev (for nginx)
 RUN apt-get install -y libpcre3-dev
+# for php imap extension
+RUN apt-get install -y libc-client2007e-dev libc-client-dev libkrb5-dev
+
+#http://nginx.org/en/download.html
+ARG NGINX_VERSION=1.22.1
+#https://www.php.net/
+ARG PHP_VERSION=8.1.30
+#https://xdebug.org/ 安装xdebug扩展但是默认不开启
+#https://xdebug.org/docs/compat
+ARG XDEBUG_VERSION=3.3.2
 
 #Add user  && download php and nginx source code
 #    groupadd -r www && \
@@ -46,7 +49,7 @@ RUN tar -zxf nginx.tar.gz && rm -f nginx.tar.gz && \
     --with-http_ssl_module \
     --with-http_gzip_static_module \
     --with-http_stub_status_module && \
-    make -j8 > /dev/null && make install
+    make -j$(nproc) > /dev/null && make install
 #    --error-log-path=/var/log/nginx/error.log \
 #    --http-log-path=/var/log/nginx/access.log \
 #    --conf-path=/usr/local/nginx/nginx.conf \
@@ -84,8 +87,11 @@ RUN tar zxf php.tar.gz && rm -f php.tar.gz && \
     --with-pear \
     --disable-cgi \
     --disable-phpdbg \
+    --with-imap \
+    --with-imap-ssl \
+    --with-kerberos \
     && \
-    make -j8 > /dev/null && make install;
+    make -j$(nproc) > /dev/null && make install;
 #    --with-xmlrpc \  This extension is EXPERIMENTAL.
 #    --with-mhash \
 #    --disable-ctype \
@@ -94,6 +100,10 @@ RUN tar zxf php.tar.gz && rm -f php.tar.gz && \
 #    --enable-ftp \
 #   --without-pear    will remove pecl
 # --enable-inline-optimization  PHP8.1移除了此编译选项：configure: WARNING: unrecognized options: --enable-inline-optimization
+#
+# --with-imap[=DIR]       Include IMAP support. DIR is the c-client install
+# --with-kerberos         OPENSSL: Include Kerberos support
+# --with-kerberos         IMAP: Include Kerberos support
 
 RUN cp ./php-${PHP_VERSION}/php.ini-production /usr/local/php/etc/php.ini && \
     mv /usr/local/php/etc/php-fpm.conf.default /usr/local/php/etc/php-fpm.conf && \
@@ -129,6 +139,8 @@ RUN echo "#zend_extension=xdebug.so" >> /usr/local/php/etc/php.ini
 
 # phpize need `/usr/local/php/include`; pecl安装扩展还需要依赖autoconf等工具
 RUN rm -rf /usr/local/php/include
+
+RUN ldd $(command -v php)
 
 
 FROM ubuntu:20.04
@@ -193,6 +205,8 @@ COPY --from=build-env   \
     /lib/x86_64-linux-gnu/libbrotlicommon.so.1 \
     \
     /lib/x86_64-linux-gnu/
+# /lib/libc-client.so.2007e for php imap extension, from libc-client2007e-dev package
+COPY --from=build-env /lib/libc-client.so.2007e /lib/
 
 #overwrite nginx.conf
 ADD conf/nginx.conf /usr/local/nginx/conf/nginx.conf
