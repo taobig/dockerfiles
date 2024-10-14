@@ -1,16 +1,9 @@
 FROM ubuntu:20.04 AS build-env
 
-#http://nginx.org/en/download.html
-ARG NGINX_VERSION=1.24.0
-#https://www.php.net/
-ARG PHP_VERSION=8.2.22
-#https://xdebug.org/ 安装xdebug扩展但是默认不开启
-#https://xdebug.org/docs/compat
-ARG XDEBUG_VERSION=3.3.2
-
 #if not set WORKDIR, each RUN & CMD & ADD & COPY ... need to run `cd /usr/local/src`
 WORKDIR /usr/local/src
 
+RUN nproc
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get -y update
 RUN apt-get install -y wget
@@ -21,6 +14,14 @@ RUN apt-get install -y build-essential autoconf make automake bison re2c libxml2
 RUN apt-get install -y libsqlite3-dev libonig-dev
 # 20.04 add: libpcre3-dev (for nginx)
 RUN apt-get install -y libpcre3-dev
+
+#http://nginx.org/en/download.html
+ARG NGINX_VERSION=1.24.0
+#https://www.php.net/
+ARG PHP_VERSION=8.2.24
+#https://xdebug.org/ 安装xdebug扩展但是默认不开启
+#https://xdebug.org/docs/compat
+ARG XDEBUG_VERSION=3.3.2
 
 #Add user  && download php and nginx source code
 #    groupadd -r www && \
@@ -46,7 +47,7 @@ RUN tar -zxf nginx.tar.gz && rm -f nginx.tar.gz && \
     --with-http_ssl_module \
     --with-http_gzip_static_module \
     --with-http_stub_status_module && \
-    make -j8 > /dev/null && make install
+    make -j$(nproc) > /dev/null && make install
 #    --error-log-path=/var/log/nginx/error.log \
 #    --http-log-path=/var/log/nginx/access.log \
 #    --conf-path=/usr/local/nginx/nginx.conf \
@@ -85,7 +86,7 @@ RUN tar zxf php.tar.gz && rm -f php.tar.gz && \
     --disable-cgi \
     --disable-phpdbg \
     && \
-    make -j8 > /dev/null && make install;
+    make -j$(nproc) > /dev/null && make install;
 #    --with-xmlrpc \  This extension is EXPERIMENTAL.
 #    --with-mhash \
 #    --disable-ctype \
@@ -129,6 +130,8 @@ RUN echo "#zend_extension=xdebug.so" >> /usr/local/php/etc/php.ini
 
 # phpize need `/usr/local/php/include`; pecl安装扩展还需要依赖autoconf等工具
 RUN rm -rf /usr/local/php/include
+
+RUN ldd $(command -v php)
 
 
 FROM ubuntu:20.04
