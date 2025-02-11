@@ -116,7 +116,7 @@ RUN cp ./php-${PHP_VERSION}/php.ini-production /usr/local/php/etc/php.ini && \
     ln  -s  /usr/local/php/bin/pecl    /usr/local/bin/pecl && \
     ln  -s  /usr/local/php/bin/pear    /usr/local/bin/pear && \
     ln  -s  /usr/local/php/bin/php-config    /usr/local/bin/php-config
-#RUN strip /usr/local/php/lib/php/extensions/no-debug-non-zts-20200930/opcache.so
+#RUN strip /usr/local/php/lib/php/extensions/no-debug-non-zts-20210902/opcache.so
 RUN for tmp_file in /usr/local/php/lib/php/extensions/**/*;do strip $tmp_file; done;unset tmp_file;
 
 RUN sed -i 's/^;date\.timezone[ ]*=[ ]*/date\.timezone = Asia\/Shanghai/' /usr/local/php/etc/php.ini  && \
@@ -134,7 +134,7 @@ RUN sed -i 's/^;date\.timezone[ ]*=[ ]*/date\.timezone = Asia\/Shanghai/' /usr/l
 #    sed -i 's/^;cgi\.fix_pathinfo[ ]*=[ ]*1/cgi\.fix_pathinfo=0/' /usr/local/php/etc/php.ini
 #    sed -i 's/^;security\.limit_extensions .../default setting is safe/' /usr/local/php/etc/php-fpm.d/www.conf  && \
 RUN pecl install xdebug-${XDEBUG_VERSION}
-# 默认不开启扩展，请自行开启：zend_extension=/usr/local/php/lib/php/extensions/no-debug-non-zts-20200930/xdebug.so >> /usr/local/php/etc/php.ini
+# 默认不开启扩展，请自行开启：zend_extension=/usr/local/php/lib/php/extensions/no-debug-non-zts-20210902/xdebug.so >> /usr/local/php/etc/php.ini
 RUN echo "#zend_extension=xdebug.so" >> /usr/local/php/etc/php.ini
 
 # phpize need `/usr/local/php/include`; pecl安装扩展还需要依赖autoconf等工具
