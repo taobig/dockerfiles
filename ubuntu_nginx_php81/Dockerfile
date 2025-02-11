@@ -20,7 +20,7 @@ RUN apt-get install -y libc-client2007e-dev libc-client-dev libkrb5-dev
 #http://nginx.org/en/download.html
 ARG NGINX_VERSION=1.22.1
 #https://www.php.net/
-ARG PHP_VERSION=8.1.30
+ARG PHP_VERSION=8.1.31
 #https://xdebug.org/ 安装xdebug扩展但是默认不开启
 #https://xdebug.org/docs/compat
 ARG XDEBUG_VERSION=3.3.2
