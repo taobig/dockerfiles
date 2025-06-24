@@ -13,6 +13,7 @@
 | ubuntu_nginx_php81                 | **taobig/nginx-php81**             | `Ubuntu:20.04 + nginx:1.22 + PHP 8.1-FPM`                                 |
 | ubuntu_nginx_php82                 | **taobig/nginx-php82**             | `Ubuntu:20.04 + nginx:1.24 + PHP 8.2-FPM`                                 |
 | ubuntu_nginx_php83                 | **taobig/nginx-php83**             | `Ubuntu:20.04 + nginx:1.26 + PHP 8.3-FPM`                                 |
+| ubuntu_nginx_php84                 | **taobig/nginx-php84**             | `Ubuntu:22.04 + nginx:1.26 + PHP 8.4-FPM`                                 |
 
 ## usage
 ```shell
@@ -42,7 +43,7 @@ cd ubuntu_nginx_php81
 docker build --pull -t taobig/nginx-php81 .
 docker run --rm --name php81 -d taobig/nginx-php81
 
-cd ubuntu_nginx_php81_dev
-docker build --pull -t taobig/nginx-php81:dev .
-```
+cd ubuntu_nginx_php84 && ./build.sh
+docker run --rm --name php84 -d taobig/nginx-php84
 
+```
