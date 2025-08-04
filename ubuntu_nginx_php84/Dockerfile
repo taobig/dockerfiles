@@ -17,9 +17,9 @@ RUN apt-get install -y libpcre3-dev
 #http://nginx.org/en/download.html
 ARG NGINX_VERSION=1.26.3
 #https://www.php.net/
-ARG PHP_VERSION=8.4.6
+ARG PHP_VERSION=8.4.11
 #https://xdebug.org/ 安装xdebug扩展但是默认不开启
-ARG XDEBUG_VERSION=3.4.2
+ARG XDEBUG_VERSION=3.4.5
 
 #Add user  && download php and nginx source code
 #    groupadd -r www && \
