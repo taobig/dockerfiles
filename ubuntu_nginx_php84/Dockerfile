@@ -3,6 +3,7 @@ FROM ubuntu:22.04 AS build-env
 #if not set WORKDIR, each RUN & CMD & ADD & COPY ... need to run `cd /usr/local/src`
 WORKDIR /usr/local/src
 
+RUN nproc
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get -y update
 RUN apt-get install -y wget
@@ -17,9 +18,10 @@ RUN apt-get install -y libpcre3-dev
 #http://nginx.org/en/download.html
 ARG NGINX_VERSION=1.26.3
 #https://www.php.net/
-ARG PHP_VERSION=8.4.11
+ARG PHP_VERSION=8.4.15
 #https://xdebug.org/ 安装xdebug扩展但是默认不开启
-ARG XDEBUG_VERSION=3.4.5
+#https://xdebug.org/docs/compat
+ARG XDEBUG_VERSION=3.4.7
 
 #Add user  && download php and nginx source code
 #    groupadd -r www && \
@@ -108,12 +110,14 @@ RUN cp ./php-${PHP_VERSION}/php.ini-production /usr/local/php/etc/php.ini && \
 #RUN strip /usr/local/php/lib/php/extensions/no-debug-non-zts-20200930/opcache.so
 RUN for tmp_file in /usr/local/php/lib/php/extensions/**/*;do strip $tmp_file; done;unset tmp_file;
 
+# 要求：post_max_size ≥ upload_max_filesize
 RUN sed -i 's/^;date\.timezone[ ]*=[ ]*/date\.timezone = Asia\/Shanghai/' /usr/local/php/etc/php.ini  && \
     sed -i 's/^session\.use_strict_mode = 0/session\.use_strict_mode = 1/' /usr/local/php/etc/php.ini  && \
     sed -i 's/^session\.cookie_httponly =$/session\.cookie_httponly = 1/' /usr/local/php/etc/php.ini && \
     sed -i 's/^memory_limit = 128M/memory_limit = 128M/' /usr/local/php/etc/php.ini && \
     sed -i 's/^expose_php = On/expose_php = Off/' /usr/local/php/etc/php.ini && \
     sed -i 's/^upload_max_filesize = 2M/upload_max_filesize = 100M/' /usr/local/php/etc/php.ini && \
+    sed -i 's/^post_max_size = 8M/post_max_size = 100M/' /usr/local/php/etc/php.ini && \
     sed -i 's/^max_execution_time = 30/max_execution_time = 60/' /usr/local/php/etc/php.ini && \
     sed -i 's/^;request_terminate_timeout = 0/request_terminate_timeout = 120/' /usr/local/php/etc/php-fpm.d/www.conf && \
     sed -i 's/^listen = 127\.0\.0\.1:9000/listen = \/var\/run\/php-fpm\.sock/' /usr/local/php/etc/php-fpm.d/www.conf  && \
