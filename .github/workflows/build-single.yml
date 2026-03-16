@@ -23,18 +23,24 @@ jobs:
 
     steps:
       - uses: actions/checkout@v6
-      
+
+      # 如果没有指定 platforms，默认只会构建 linux/amd64（单平台）。
+      # 添加了 docker/setup-qemu-action@v3 - 用于模拟其他CPU架构
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
-      
+
       - name: Build Docker image
         uses: docker/build-push-action@v5
         with:
           context: ./${{ env.DOCKERFILE_DIR }}
           file: ./${{ env.DOCKERFILE_DIR }}/Dockerfile
+#          platforms: linux/amd64,linux/arm64
+          platforms: linux/arm64
           push: false
           tags: |
             ${{ github.event.inputs.php_version }}:latest
             ${{ github.event.inputs.php_version }}:${{ github.sha }}
           outputs: type=docker
-
