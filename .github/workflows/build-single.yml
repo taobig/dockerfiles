@@ -17,30 +17,35 @@ env:
   DOCKERFILE_DIR: ubuntu_nginx_${{ github.event.inputs.php_version }}
 
 jobs:
+  # 使用矩阵策略在不同架构的原生 runners 上并行构建
+  build:
+    strategy:
+      matrix:
+        include:
+          - runner: ubuntu-24.04        # AMD64 原生 runner
+            platform: linux/amd64
+            arch: amd64
+          - runner: ubuntu-24.04-arm64  # ARM64 原生 runner (GitHub 免费提供)
+            platform: linux/arm64
+            arch: arm64
 
-  build_single:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.runner }}
 
     steps:
       - uses: actions/checkout@v6
 
-      # 如果没有指定 platforms，默认只会构建 linux/amd64（单平台）。
-      # 添加了 docker/setup-qemu-action@v3 - 用于模拟其他CPU架构
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
-
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Build Docker image
+      - name: Build Docker image (${{ matrix.arch }})
         uses: docker/build-push-action@v5
         with:
           context: ./${{ env.DOCKERFILE_DIR }}
           file: ./${{ env.DOCKERFILE_DIR }}/Dockerfile
-#          platforms: linux/amd64,linux/arm64
-          platforms: linux/arm64
+          platforms: ${{ matrix.platform }}
           push: false
+          pull: true  # true: 强制拉取最新的 base image， false 或不设置: 使用本地缓存的image（如果存在）
           tags: |
-            ${{ github.event.inputs.php_version }}:latest
-            ${{ github.event.inputs.php_version }}:${{ github.sha }}
+            ${{ github.event.inputs.php_version }}:latest-${{ matrix.arch }}
+            ${{ github.event.inputs.php_version }}:${{ github.sha }}-${{ matrix.arch }}
           outputs: type=docker
