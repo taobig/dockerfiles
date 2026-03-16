@@ -1,0 +1,40 @@
+name: Build Single Image
+
+on:
+  workflow_dispatch:
+    inputs:
+      php_version:
+        description: "PHP version to build"
+        required: true
+        type: choice
+        options:
+          - php81 # 必须和 Dockerfile 目录名的后缀一致
+          - php82
+          - php83
+          - php84
+
+env:
+  DOCKERFILE_DIR: ubuntu_nginx_${{ github.event.inputs.php_version }}
+
+jobs:
+
+  build_single:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v6
+      
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      
+      - name: Build Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./${{ env.DOCKERFILE_DIR }}
+          file: ./${{ env.DOCKERFILE_DIR }}/Dockerfile
+          push: false
+          tags: |
+            ${{ github.event.inputs.php_version }}:latest
+            ${{ github.event.inputs.php_version }}:${{ github.sha }}
+          outputs: type=docker
+
