@@ -8,8 +8,7 @@ on:
         required: true
         type: choice
         options:
-          - php81 # 必须和 Dockerfile 目录名的后缀一致
-          - php82
+          - php82 # 必须和 Dockerfile 目录名的后缀一致
           - php83
           - php84
 
