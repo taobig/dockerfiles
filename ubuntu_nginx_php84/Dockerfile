@@ -135,6 +135,57 @@ RUN rm -rf /usr/local/php/include
 
 RUN ldd $(command -v php)
 
+# amd64: /lib/x86_64-linux-gnu  arm64: /lib/aarch64-linux-gnu
+RUN MULTIARCH="$(dpkg-architecture -qDEB_HOST_MULTIARCH)" && \
+    mkdir -p /export/lib/${MULTIARCH} && \
+    cp -a \
+        /lib/${MULTIARCH}/libm.so.6 \
+        /lib/${MULTIARCH}/libxml2.so.2 \
+        /lib/${MULTIARCH}/libssl.so.3 \
+        /lib/${MULTIARCH}/libcrypto.so.3 \
+        /lib/${MULTIARCH}/libsqlite3.so.0 \
+        /lib/${MULTIARCH}/libz.so.1 \
+        /lib/${MULTIARCH}/libcurl-gnutls.so.4 \
+        /lib/${MULTIARCH}/libpng16.so.16 \
+        /lib/${MULTIARCH}/libjpeg.so.8 \
+        /lib/${MULTIARCH}/libfreetype.so.6 \
+        /lib/${MULTIARCH}/libonig.so.5 \
+        /lib/${MULTIARCH}/libzip.so.4 \
+        /lib/${MULTIARCH}/libc.so.6 \
+        /lib/${MULTIARCH}/libicuuc.so.70 \
+        /lib/${MULTIARCH}/liblzma.so.5 \
+        /lib/${MULTIARCH}/libnghttp2.so.14 \
+        /lib/${MULTIARCH}/libidn2.so.0 \
+        /lib/${MULTIARCH}/librtmp.so.1 \
+        /lib/${MULTIARCH}/libssh.so.4 \
+        /lib/${MULTIARCH}/libpsl.so.5 \
+        /lib/${MULTIARCH}/libnettle.so.8 \
+        /lib/${MULTIARCH}/libgnutls.so.30 \
+        /lib/${MULTIARCH}/libgssapi_krb5.so.2 \
+        /lib/${MULTIARCH}/libldap-2.5.so.0 \
+        /lib/${MULTIARCH}/liblber-2.5.so.0 \
+        /lib/${MULTIARCH}/libzstd.so.1 \
+        /lib/${MULTIARCH}/libbrotlidec.so.1 \
+        /lib/${MULTIARCH}/libbz2.so.1.0 \
+        /lib/${MULTIARCH}/libicudata.so.70 \
+        /lib/${MULTIARCH}/libstdc++.so.6 \
+        /lib/${MULTIARCH}/libgcc_s.so.1 \
+        /lib/${MULTIARCH}/libunistring.so.2 \
+        /lib/${MULTIARCH}/libhogweed.so.6 \
+        /lib/${MULTIARCH}/libgmp.so.10 \
+        /lib/${MULTIARCH}/libp11-kit.so.0 \
+        /lib/${MULTIARCH}/libtasn1.so.6 \
+        /lib/${MULTIARCH}/libkrb5.so.3 \
+        /lib/${MULTIARCH}/libk5crypto.so.3 \
+        /lib/${MULTIARCH}/libcom_err.so.2 \
+        /lib/${MULTIARCH}/libkrb5support.so.0 \
+        /lib/${MULTIARCH}/libsasl2.so.2 \
+        /lib/${MULTIARCH}/libbrotlicommon.so.1 \
+        /lib/${MULTIARCH}/libffi.so.8 \
+        /lib/${MULTIARCH}/libkeyutils.so.1 \
+        /lib/${MULTIARCH}/libresolv.so.2 \
+        /export/lib/${MULTIARCH}/
+
 FROM ubuntu:22.04
 COPY --from=build-env /usr/local/nginx /usr/local/nginx
 COPY --from=build-env /usr/local/php /usr/local/php
@@ -142,54 +193,7 @@ COPY --from=build-env /usr/local/php /usr/local/php
 # for dev
 #COPY --from=build-env /usr/local/src/dependencies.txt /usr/local/src/dependencies.txt
 
-COPY --from=build-env   \
-    /lib/x86_64-linux-gnu/libm.so.6 \
-    /lib/x86_64-linux-gnu/libxml2.so.2 \
-    /lib/x86_64-linux-gnu/libssl.so.3 \
-    /lib/x86_64-linux-gnu/libcrypto.so.3 \
-    /lib/x86_64-linux-gnu/libsqlite3.so.0 \
-    /lib/x86_64-linux-gnu/libz.so.1 \
-    /lib/x86_64-linux-gnu/libcurl-gnutls.so.4 \
-    /lib/x86_64-linux-gnu/libpng16.so.16 \
-    /lib/x86_64-linux-gnu/libjpeg.so.8 \
-    /lib/x86_64-linux-gnu/libfreetype.so.6 \
-    /lib/x86_64-linux-gnu/libonig.so.5 \
-    /lib/x86_64-linux-gnu/libzip.so.4 \
-    /lib/x86_64-linux-gnu/libc.so.6 \
-    /lib/x86_64-linux-gnu/libicuuc.so.70 \
-    /lib/x86_64-linux-gnu/liblzma.so.5 \
-    /lib/x86_64-linux-gnu/libnghttp2.so.14 \
-    /lib/x86_64-linux-gnu/libidn2.so.0 \
-    /lib/x86_64-linux-gnu/librtmp.so.1 \
-    /lib/x86_64-linux-gnu/libssh.so.4 \
-    /lib/x86_64-linux-gnu/libpsl.so.5 \
-    /lib/x86_64-linux-gnu/libnettle.so.8 \
-    /lib/x86_64-linux-gnu/libgnutls.so.30 \
-    /lib/x86_64-linux-gnu/libgssapi_krb5.so.2 \
-    /lib/x86_64-linux-gnu/libldap-2.5.so.0 \
-    /lib/x86_64-linux-gnu/liblber-2.5.so.0 \
-    /lib/x86_64-linux-gnu/libzstd.so.1 \
-    /lib/x86_64-linux-gnu/libbrotlidec.so.1 \
-    /lib/x86_64-linux-gnu/libbz2.so.1.0 \
-    /lib/x86_64-linux-gnu/libicudata.so.70 \
-    /lib/x86_64-linux-gnu/libstdc++.so.6 \
-    /lib/x86_64-linux-gnu/libgcc_s.so.1 \
-    /lib/x86_64-linux-gnu/libunistring.so.2 \
-    /lib/x86_64-linux-gnu/libhogweed.so.6 \
-    /lib/x86_64-linux-gnu/libgmp.so.10 \
-    /lib/x86_64-linux-gnu/libp11-kit.so.0 \
-    /lib/x86_64-linux-gnu/libtasn1.so.6 \
-    /lib/x86_64-linux-gnu/libkrb5.so.3 \
-    /lib/x86_64-linux-gnu/libk5crypto.so.3 \
-    /lib/x86_64-linux-gnu/libcom_err.so.2 \
-    /lib/x86_64-linux-gnu/libkrb5support.so.0 \
-    /lib/x86_64-linux-gnu/libsasl2.so.2 \
-    /lib/x86_64-linux-gnu/libbrotlicommon.so.1 \
-    /lib/x86_64-linux-gnu/libffi.so.8 \
-    /lib/x86_64-linux-gnu/libkeyutils.so.1 \
-    /lib/x86_64-linux-gnu/libresolv.so.2 \
-    \
-    /lib/x86_64-linux-gnu/
+COPY --from=build-env /export/lib /lib
 
 #overwrite nginx.conf
 ADD conf/nginx.conf /usr/local/nginx/conf/nginx.conf
