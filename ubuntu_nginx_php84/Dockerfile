@@ -136,9 +136,10 @@ RUN rm -rf /usr/local/php/include
 RUN ldd $(command -v php)
 
 # amd64: /lib/x86_64-linux-gnu  arm64: /lib/aarch64-linux-gnu
+# -L: 跟随 soname symlink，拷真实 .so（整目录 COPY 不会解引用，否则可能把悬空链接盖到 runtime）
 RUN MULTIARCH="$(dpkg-architecture -qDEB_HOST_MULTIARCH)" && \
     mkdir -p /export/lib/${MULTIARCH} && \
-    cp -a \
+    cp -L --preserve=timestamps,mode \
         /lib/${MULTIARCH}/libm.so.6 \
         /lib/${MULTIARCH}/libxml2.so.2 \
         /lib/${MULTIARCH}/libssl.so.3 \
