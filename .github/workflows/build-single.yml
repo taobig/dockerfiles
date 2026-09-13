@@ -24,7 +24,7 @@ jobs:
           - runner: ubuntu-24.04        # AMD64 原生 runner
             platform: linux/amd64
             arch: amd64
-          - runner: ubuntu-24.04-arm64  # ARM64 原生 runner (GitHub 免费提供)
+          - runner: ubuntu-24.04-arm    # ARM64 原生 runner (GitHub 免费提供)
             platform: linux/arm64
             arch: arm64
 
