@@ -46,7 +46,7 @@ jobs:
         if: ${{ github.event.inputs.push_to_registry == 'true' }}
         uses: docker/login-action@v3
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          username: ${{ vars.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Build and push by digest
@@ -57,15 +57,17 @@ jobs:
           file: ./${{ env.DOCKERFILE_DIR }}/Dockerfile
           platforms: ${{ matrix.platform }}
           pull: true  # 强制拉取最新的 base image
+          # push-by-digest 只能给仓库名，带 :tag 会报 can't push tagged ref by digest
+          tags: ${{ github.event.inputs.push_to_registry == 'true' && env.IMAGE_NAME || format('{0}:latest-{1}', env.IMAGE_NAME, matrix.arch) }}
+          provenance: false  # 避免 OCI digest 与 registry digest 不一致，merge 时找不到镜像
           outputs: ${{ github.event.inputs.push_to_registry == 'true' && format('type=image,name={0},push-by-digest=true,name-canonical=true,push=true', env.IMAGE_NAME) || 'type=docker' }}
-          tags: |
-            ${{ env.IMAGE_NAME }}:latest-${{ matrix.arch }}
 
       - name: Export digest
         if: ${{ github.event.inputs.push_to_registry == 'true' }}
         run: |
           mkdir -p /tmp/digests
           digest="${{ steps.build.outputs.digest }}"
+          test -n "$digest"
           touch "/tmp/digests/${digest#sha256:}"
 
       - name: Upload digest
@@ -79,7 +81,7 @@ jobs:
 
   # 合并多架构镜像并推送到 registry
   merge:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     if: ${{ github.event.inputs.push_to_registry == 'true' }}
     needs: build
 
@@ -97,7 +99,7 @@ jobs:
       - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          username: ${{ vars.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Create manifest list and push
