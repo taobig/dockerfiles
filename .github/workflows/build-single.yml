@@ -26,15 +26,10 @@ jobs:
   build:
     strategy:
       matrix:
-        include:
-          - runner: ubuntu-24.04        # AMD64 原生 runner
-            platform: linux/amd64
-            arch: amd64
-          - runner: ubuntu-24.04-arm    # ARM64 原生 runner (GitHub 免费提供)
-            platform: linux/arm64
-            arch: arm64
+        # PHP 8.4 支持多架构，旧版本只构建 AMD64
+        arch: ${{ fromJSON(inputs.php_version == 'php84' && '["amd64","arm64"]' || '["amd64"]') }}
 
-    runs-on: ${{ matrix.runner }}
+    runs-on: ${{ matrix.arch == 'arm64' && 'ubuntu-24.04-arm' || 'ubuntu-24.04' }}
 
     steps:
       - uses: actions/checkout@v6
@@ -55,7 +50,7 @@ jobs:
         with:
           context: ./${{ env.DOCKERFILE_DIR }}
           file: ./${{ env.DOCKERFILE_DIR }}/Dockerfile
-          platforms: ${{ matrix.platform }}
+          platforms: linux/${{ matrix.arch }}
           pull: true  # 强制拉取最新的 base image
           # push-by-digest 只能给仓库名，带 :tag 会报 can't push tagged ref by digest
           tags: ${{ inputs.push_to_registry && env.IMAGE_NAME || format('{0}:latest-{1}', env.IMAGE_NAME, matrix.arch) }}
